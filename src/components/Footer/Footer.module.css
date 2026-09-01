@@ -1,294 +1,422 @@
 .footer {
   width: 100%;
-  background-color: #060606;
+  background-color: #040404;
   border-top: 1px solid var(--border-subtle);
-  padding: 80px 0 40px;
+  padding: 100px 0 48px;
   position: relative;
+  overflow: hidden;
 }
 
 .container {
   max-width: 1720px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 48px;
   display: flex;
   flex-direction: column;
-  gap: 64px;
+  gap: 80px;
 }
 
-/* Newsletter Card */
-.newsletterCard {
-  background: #0f0f0f;
-  border: 1px solid var(--border-subtle);
+/* ==========================================================================
+   04 — PRIVATE ARCHIVE ENLISTMENT CARD
+   ========================================================================== */
+.archiveEnlistmentCard {
+  background: rgba(14, 14, 14, 0.6);
+  border: 1px solid rgba(245, 242, 235, 0.08);
   border-radius: var(--radius-xs);
-  padding: 40px;
+  padding: 48px;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
-  gap: 36px;
-  align-items: center;
-}
-
-.newsletterLeft {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.newsletterSuper {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  color: var(--accent-crimson);
-  font-weight: 700;
-}
-
-.newsletterTitle {
-  font-family: var(--font-display);
-  font-size: clamp(22px, 2.5vw, 32px);
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: 0.04em;
-}
-
-.newsletterDesc {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  max-width: 480px;
-}
-
-.form {
-  display: flex;
-  gap: 8px;
-}
-
-.emailInput {
-  flex: 1;
-  background: #141414;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xs);
-  padding: 14px 18px;
-  color: var(--text-primary);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  outline: none;
-  transition: border-color var(--transition-fast);
-}
-
-.emailInput:focus {
-  border-color: var(--accent-crimson);
-}
-
-.submitBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--accent-crimson);
-  color: #fff;
-  padding: 14px 24px;
-  border-radius: var(--radius-xs);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  transition: all var(--transition-fast);
-}
-
-.submitBtn:hover {
-  background: var(--accent-crimson-hover);
-}
-
-.successBox {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: rgba(74, 222, 128, 0.08);
-  border: 1px solid rgba(74, 222, 128, 0.3);
-  padding: 16px 20px;
-  border-radius: var(--radius-xs);
-}
-
-.successIcon {
-  color: #4ade80;
-  flex-shrink: 0;
-}
-
-.successBox strong {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: #4ade80;
-  display: block;
-}
-
-.successBox p {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-secondary);
-}
-
-.successBox p strong {
-  display: inline;
-  color: var(--accent-gold);
-}
-
-/* Links Grid */
-.linksGrid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 48px;
+  align-items: center;
 }
 
-.brandCol {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  max-width: 360px;
-}
-
-.brandHeader {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.jpWordmark {
-  font-family: var(--font-sans);
-  font-size: 10px;
-  letter-spacing: 0.4em;
-  color: var(--accent-crimson);
-  font-weight: 700;
-}
-
-.brandTitle {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  color: var(--text-primary);
-}
-
-.brandSub {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.24em;
-  color: var(--text-muted);
-}
-
-.brandBio {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-}
-
-.coordinatesTag {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  color: var(--accent-gold);
-}
-
-.linkCol {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.colTitle {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  color: var(--text-primary);
-  font-weight: 700;
-}
-
-.linkList {
-  list-style: none;
+.enlistLeft {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.linkList li a {
+.enlistEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--accent-crimson);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.crimsonDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--accent-crimson);
+  box-shadow: 0 0 8px var(--accent-crimson);
+}
+
+.enlistTitle {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.2vw, 40px);
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.enlistDesc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.65;
+  color: #a8a49c;
+  max-width: 500px;
+}
+
+.enlistRight {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.enlistForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inputWrapper {
+  display: flex;
+  background: #0d0d0d;
+  border: 1px solid rgba(245, 242, 235, 0.12);
+  border-radius: var(--radius-xs);
+  padding: 4px;
+  transition: border-color var(--transition-fast);
+}
+
+.inputWrapper:focus-within {
+  border-color: var(--accent-crimson);
+  box-shadow: 0 0 16px rgba(181, 18, 27, 0.2);
+}
+
+.emailInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 14px 18px;
+  color: #f5f2eb;
   font-family: var(--font-mono);
   font-size: 11px;
-  color: var(--text-muted);
-  transition: color var(--transition-fast);
+  letter-spacing: 0.12em;
+  outline: none;
 }
 
-.linkList li a:hover {
+.emailInput::placeholder {
+  color: #646059;
+}
+
+.enlistBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-crimson);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.enlistBtn:hover {
+  background: var(--accent-crimson-hover);
+}
+
+.privacyNote {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: #7a766e;
+}
+
+.privacyLock {
+  color: var(--accent-gold);
+}
+
+.successState {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(181, 18, 27, 0.08);
+  border: 1px solid var(--border-crimson);
+  padding: 20px 24px;
+  border-radius: var(--radius-xs);
+}
+
+.successBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-crimson);
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.successInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.successInfo strong {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: #ffffff;
+}
+
+.successInfo span {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: #a8a49c;
+}
+
+/* ==========================================================================
+   07 — LARGE BRAND STATEMENT
+   ========================================================================== */
+.brandHeroArea {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 1px solid rgba(245, 242, 235, 0.08);
+  padding-bottom: 40px;
+}
+
+.brandTitleRow {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+}
+
+.bigBrandTitle {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 7vw, 104px);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.bigJpBrand {
+  font-family: var(--font-sans);
+  font-size: clamp(24px, 3.5vw, 48px);
+  font-weight: 800;
   color: var(--accent-crimson);
+  letter-spacing: 0.16em;
 }
 
-/* Bottom Bar */
+.brandSubStatement {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: #a8a49c;
+}
+
+.brandJpMotto {
+  color: var(--accent-gold);
+  border-left: 1px solid rgba(245, 242, 235, 0.15);
+  padding-left: 16px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   4-COLUMN NAVIGATION GRID
+   ========================================================================== */
+.footerGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 48px;
+}
+
+.footerCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.colHeader {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: #f5f2eb;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(245, 242, 235, 0.08);
+  padding-bottom: 8px;
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.navLink {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  color: #8c8880;
+  letter-spacing: 0.02em;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  display: inline-block;
+}
+
+.navLink:hover {
+  color: #ffffff;
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   FOOTER BOTTOM BAR
+   ========================================================================== */
 .bottomBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 24px;
-  border-top: 1px solid rgba(244, 240, 232, 0.05);
+  border-top: 1px solid rgba(245, 242, 235, 0.06);
+  padding-top: 28px;
+  gap: 24px;
+}
+
+.bottomLeft {
+  display: flex;
+  align-items: center;
+  gap: 24px;
   font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  color: #7a766e;
 }
 
-.bottomBadges {
+.legalLinks {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
 }
 
-.statusBadge {
+.legalLinks a {
+  color: #7a766e;
+  transition: color var(--transition-fast);
+}
+
+.legalLinks a:hover {
+  color: var(--accent-crimson);
+}
+
+.bottomRight {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+.locationTag {
+  color: #8c8880;
+}
+
+.dispatchStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   color: #4ade80;
+  font-weight: 700;
 }
 
-.statusDot {
+.greenDot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
   background-color: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+  animation: greenPulse 2s infinite ease-in-out;
 }
 
-.securityBadge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--text-secondary);
+@keyframes greenPulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .newsletterCard {
-    grid-template-columns: 1fr;
-  }
-  .linksGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-}
-
-@media (max-width: 640px) {
   .container {
-    padding: 0 16px;
-    gap: 40px;
+    padding: 0 32px;
+    gap: 56px;
   }
-  .newsletterCard {
-    padding: 24px;
-  }
-  .form {
-    flex-direction: column;
-  }
-  .linksGrid {
+  .archiveEnlistmentCard {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 32px;
+    padding: 32px;
+  }
+  .footerGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px;
   }
   .bottomBar {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer {
+    padding: 60px 0 36px;
+  }
+  .container {
+    padding: 0 20px;
+    gap: 44px;
+  }
+  .archiveEnlistmentCard {
+    padding: 24px 20px;
+  }
+  .inputWrapper {
+    flex-direction: column;
+    padding: 6px;
+    gap: 8px;
+  }
+  .enlistBtn {
+    justify-content: center;
+  }
+  .footerGrid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .bottomLeft {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .bottomRight {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 }

@@ -1,46 +1,295 @@
-.section {
+.wrapper {
   width: 100%;
-  padding: 120px 0;
+  display: flex;
+  flex-direction: column;
   background-color: var(--bg-main);
-  border-top: 1px solid var(--border-subtle);
-  position: relative;
 }
 
 .container {
   max-width: 1720px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 48px;
+  width: 100%;
 }
 
-/* Narrative Split */
-.narrativeSplit {
+/* ==========================================================================
+   01 — THE THREE HORIZONTAL FEATURE PANELS
+   ========================================================================== */
+.featureSection {
+  padding: 120px 0 80px;
+  border-top: 1px solid var(--border-subtle);
+  background-color: var(--bg-main);
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 56px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  color: #a8a49c;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.crimsonDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--accent-crimson);
+  box-shadow: 0 0 8px var(--accent-crimson);
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4.2vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.sectionSubtitle {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: #a8a49c;
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+.featureGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  margin-bottom: 80px;
-  align-items: flex-start;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
 }
 
-.leftCol {
+.featurePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: rgba(14, 14, 14, 0.45);
+  border: 1px solid rgba(245, 242, 235, 0.08);
+  border-radius: var(--radius-xs);
+  padding: 24px;
+  transition: all var(--transition-fast);
+}
+
+.featurePanel:hover {
+  background: rgba(22, 22, 22, 0.85);
+  border-color: rgba(245, 242, 235, 0.22);
+  transform: translateY(-3px);
+}
+
+.panelTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(245, 242, 235, 0.06);
+  padding-bottom: 12px;
+}
+
+.panelNum {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--accent-crimson);
+  letter-spacing: 0.12em;
+}
+
+.panelJpLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: #8c8880;
+  font-weight: 700;
+}
+
+.panelImageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 2px;
+  overflow: hidden;
+  background-color: #0b0b0b;
+}
+
+.panelImg {
+  object-fit: cover;
+  object-position: center;
+  transition: transform var(--transition-smooth);
+}
+
+.featurePanel:hover .panelImg {
+  transform: scale(1.04);
+}
+
+.panelImgOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, transparent 50%, rgba(6, 6, 6, 0.6) 100%);
+}
+
+.panelSpecBadge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  background: rgba(6, 6, 6, 0.88);
+  border: 1px solid rgba(245, 242, 235, 0.15);
+  padding: 3px 8px;
+  border-radius: 2px;
+  color: #f5f2eb;
+  font-weight: 700;
+}
+
+.panelContent {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.superText {
+.panelTitle {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.panelDesc {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #a8a49c;
+}
+
+.panelAttributes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.attrPill {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  background: rgba(245, 242, 235, 0.04);
+  border: 1px solid rgba(245, 242, 235, 0.08);
+  border-radius: 2px;
+  color: #c7a76c;
+}
+
+/* ==========================================================================
+   02 — FROM FABRIC TO FORM MATERIAL STORY
+   ========================================================================== */
+.materialSection {
+  padding: 100px 0 120px;
+  background-color: #080808;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.materialGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 64px;
+  align-items: flex-start;
+}
+
+.materialImageCard {
+  width: 100%;
+}
+
+.materialImageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  border: 1px solid rgba(245, 242, 235, 0.1);
+  background-color: #0b0b0b;
+}
+
+.materialImg {
+  object-fit: cover;
+  object-position: center;
+  transition: transform var(--transition-lux);
+}
+
+.materialImageWrapper:hover .materialImg {
+  transform: scale(1.02);
+}
+
+.materialImageGradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, transparent 60%, rgba(6, 6, 6, 0.7) 100%);
+}
+
+.materialImageBadge {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  background: rgba(6, 6, 6, 0.88);
+  border: 1px solid rgba(245, 242, 235, 0.15);
+  padding: 5px 12px;
+  border-radius: 2px;
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+.materialTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.materialHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.materialSuper {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
   letter-spacing: 0.24em;
   color: var(--accent-crimson);
   font-weight: 700;
 }
 
-.headline {
+.materialHeadline {
   font-family: var(--font-display);
-  font-size: clamp(38px, 4.5vw, 64px);
+  font-size: clamp(32px, 3.8vw, 50px);
   font-weight: 800;
-  color: var(--text-primary);
-  line-height: 1.05;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
   text-transform: uppercase;
 }
 
@@ -48,120 +297,222 @@
   color: var(--accent-crimson);
 }
 
-.japaneseMotto {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  color: var(--accent-gold);
-  margin-top: 8px;
-}
-
-.rightCol {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding-top: 12px;
-}
-
-.leadParagraph {
-  font-family: var(--font-sans);
-  font-size: 18px;
-  line-height: 1.6;
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.secondaryParagraph {
+.materialLead {
   font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.7;
-  color: var(--text-secondary);
+  color: #a8a49c;
 }
 
-/* Pillars Grid */
-.pillarsGrid {
+.specGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 4px;
+  border-top: 1px solid rgba(245, 242, 235, 0.08);
+  padding-top: 20px;
 }
 
-.pillarCard {
-  background: #0f0f0f;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xs);
-  padding: 36px 28px;
+.specItem {
   display: flex;
   flex-direction: column;
-  position: relative;
-  transition: border-color var(--transition-fast), transform var(--transition-fast);
-}
-
-.pillarCard:hover {
-  border-color: var(--border-medium);
-  transform: translateY(-4px);
-}
-
-.pillarIconWrapper {
-  width: 44px;
-  height: 44px;
+  gap: 4px;
+  background: rgba(14, 14, 14, 0.5);
+  border: 1px solid rgba(245, 242, 235, 0.06);
+  padding: 14px 18px;
   border-radius: var(--radius-xs);
-  background: rgba(181, 18, 27, 0.1);
-  border: 1px solid var(--border-crimson);
+}
+
+.specLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: #7a766e;
+  font-weight: 700;
+}
+
+.specValue {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #f5f2eb;
+  text-transform: uppercase;
+}
+
+.telemetryTable {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+  border-top: 1px solid rgba(245, 242, 235, 0.08);
+  padding-top: 20px;
+}
+
+.telemetryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 8px 12px;
+  background: rgba(14, 14, 14, 0.3);
+  border-left: 2px solid var(--accent-crimson);
+  border-radius: 2px;
+}
+
+.telemetryKey {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  color: #8c8880;
+  font-weight: 700;
+}
+
+.telemetryValWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.telemetryVal {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: #f5f2eb;
+  font-weight: 700;
+}
+
+.telemetrySub {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.14em;
+  color: var(--accent-gold);
+}
+
+/* ==========================================================================
+   03 — CINEMATIC FULL-WIDTH VISUAL BREAK
+   ========================================================================== */
+.visualBreakSection {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(245, 242, 235, 0.08);
+  border-bottom: 1px solid rgba(245, 242, 235, 0.08);
+}
+
+.visualBreakWrapper {
+  position: relative;
+  width: 100%;
+  height: 480px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  text-align: center;
+  padding: 48px;
 }
 
-.pillarIcon {
-  color: var(--accent-crimson);
+.visualBreakImg {
+  object-fit: cover;
+  object-position: center 35%;
 }
 
-.pillarNumber {
+.visualBreakScrim {
   position: absolute;
-  top: 24px;
-  right: 28px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(4, 4, 4, 0.72);
+  backdrop-filter: blur(1px);
+}
+
+.visualBreakContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 800px;
+}
+
+.visualBreakSuper {
   font-family: var(--font-mono);
-  font-size: 16px;
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  color: var(--accent-crimson);
   font-weight: 700;
-  color: rgba(244, 240, 232, 0.15);
 }
 
-.pillarTitle {
+.visualBreakTitle {
   font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  color: var(--text-primary);
-  margin-bottom: 12px;
-  line-height: 1.3;
+  font-size: clamp(36px, 5vw, 68px);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
-.pillarText {
+.visualBreakSubtitle {
   font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text-secondary);
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 500;
+  color: #dcd7ce;
+  letter-spacing: 0.04em;
 }
 
-/* Responsive */
+.visualBreakJp {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  color: var(--accent-gold);
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUTS
+   ========================================================================== */
 @media (max-width: 1024px) {
-  .narrativeSplit {
-    grid-template-columns: 1fr;
-    gap: 32px;
-    margin-bottom: 48px;
+  .container {
+    padding: 0 32px;
   }
-  .pillarsGrid {
+  .featureGrid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
+  }
+  .materialGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .visualBreakWrapper {
+    height: 380px;
+    padding: 32px 24px;
   }
 }
 
 @media (max-width: 640px) {
   .container {
-    padding: 0 16px;
+    padding: 0 20px;
   }
-  .section {
+  .featureSection,
+  .materialSection {
     padding: 80px 0;
+  }
+  .sectionTitle {
+    font-size: 30px;
+  }
+  .visualBreakWrapper {
+    height: 320px;
+    padding: 24px 16px;
+  }
+  .telemetryRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .telemetryValWrap {
+    align-items: flex-start;
   }
 }

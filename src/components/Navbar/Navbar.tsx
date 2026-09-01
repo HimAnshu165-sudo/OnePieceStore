@@ -21,11 +21,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 25);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -40,24 +36,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
   return (
     <>
       <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
-        {/* Top Status Ticker / Telemetry Bar */}
+        {/* Top Minimal Telemetry Bar */}
         <div className={styles.telemetryBar}>
-          <div className={styles.telemetryContent}>
-            <span className={styles.telemetryDot} />
-            <span>DROP 01 LIVE // WORLDWIDE VOYAGE DISPATCH</span>
-            <span className={styles.telemetryDivider}>|</span>
-            <span className={styles.telemetryCoords}>35.6580° N, 139.7016° E [SHIBUYA SECTOR]</span>
+          <div className={styles.telemetryLeft}>
+            <span className={styles.telemetryDot} aria-hidden="true" />
+            <span className={styles.utilityTag}>DROP 01 // TOKYO ARCHIVE</span>
           </div>
+
+          <div className={styles.telemetryCenter}>
+            <span>SHIN SEKAI • GRAND LINE SUPPLY CO.</span>
+          </div>
+
           <div className={styles.telemetryRight}>
+            <span className={styles.badgeFreeShip}>WORLDWIDE DISPATCH OVER $150</span>
+            <span className={styles.utilityDivider}>|</span>
             <button onClick={cycleCurrency} className={styles.currencyBtn} aria-label="Toggle currency">
               <Globe size={11} />
-              <span>{currency} ($)</span>
+              <span>{currency} ({currency === 'USD' ? '$' : currency === 'JPY' ? '¥' : '€'})</span>
             </button>
-            <span className={styles.badgeFreeShip}>FREE SHIPPING OVER $150</span>
           </div>
         </div>
 
-        {/* Main Navbar */}
+        {/* Main Navigation Bar */}
         <div className={styles.navContainer}>
           {/* Mobile Menu Trigger */}
           <button
@@ -68,14 +68,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
             <Menu size={20} />
           </button>
 
-          {/* Left Navigation Links */}
+          {/* Left Editorial Navigation Links */}
           <nav className={styles.desktopNav} aria-label="Main Navigation">
             <Link href="#collection" className={styles.navLink}>
-              COLLECTION
+              SHOP
               <span className={styles.navIndicator} />
             </Link>
-            <Link href="#drops" className={styles.navLink}>
-              CREWS
+            <Link href="#collection" className={styles.navLink}>
+              COLLECTIONS
               <span className={styles.navIndicator} />
             </Link>
             <Link href="#lookbook" className={styles.navLink}>
@@ -83,7 +83,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
               <span className={styles.navIndicator} />
             </Link>
             <Link href="#story" className={styles.navLink}>
-              CRAFT // 500GSM
+              JOURNAL
               <span className={styles.navIndicator} />
             </Link>
           </nav>
@@ -91,9 +91,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
           {/* Center Brand Identity */}
           <div className={styles.brandContainer}>
             <Link href="/" className={styles.brandLink}>
-              <span className={styles.japaneseWordmark}>新世界</span>
               <span className={styles.brandTitle}>SHIN SEKAI</span>
-              <span className={styles.brandSubtitle}>GRAND LINE SUPPLY CO.</span>
+              <span className={styles.japaneseSublabel}>新世界 // TOKYO ARCHIVE</span>
             </Link>
           </div>
 
@@ -104,7 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
               className={styles.actionBtn}
               aria-label="Search Collection"
             >
-              <Search size={18} />
+              <Search size={15} />
               <span className={styles.actionLabel}>SEARCH</span>
             </button>
 
@@ -113,7 +112,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
               className={styles.actionBtn}
               aria-label={`Wishlist with ${wishlistCount} items`}
             >
-              <Heart size={18} />
+              <Heart size={15} />
+              <span className={styles.actionLabel}>WISHLIST</span>
               {wishlistCount > 0 && <span className={styles.badge}>{wishlistCount}</span>}
             </button>
 
@@ -122,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
               className={`${styles.actionBtn} ${styles.cartBtn}`}
               aria-label={`Cart with ${totalItems} items`}
             >
-              <ShoppingBag size={18} />
+              <ShoppingBag size={15} />
               <span className={styles.cartLabel}>BAG</span>
               <span className={styles.cartCountBadge}>
                 {totalItems}
@@ -132,15 +132,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
         </div>
       </header>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Navigation Drawer */}
       <div
         className={`${styles.mobileDrawer} ${mobileMenuOpen ? styles.mobileDrawerOpen : ''}`}
         aria-hidden={!mobileMenuOpen}
       >
         <div className={styles.mobileDrawerHeader}>
           <div>
-            <span className={styles.japaneseWordmark}>新世界</span>
             <div className={styles.brandTitleMobile}>SHIN SEKAI</div>
+            <span className={styles.japaneseSublabel}>新世界 // TOKYO ARCHIVE</span>
           </div>
           <button
             onClick={() => setMobileMenuOpen(false)}
@@ -158,15 +158,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
               className={styles.mobileNavLink}
               onClick={() => setMobileMenuOpen(false)}
             >
-              <span>01 // THE COLLECTION</span>
+              <span>01 // SHOP</span>
               <ArrowUpRight size={16} />
             </Link>
             <Link
-              href="#drops"
+              href="#collection"
               className={styles.mobileNavLink}
               onClick={() => setMobileMenuOpen(false)}
             >
-              <span>02 // CREW DIVISIONS</span>
+              <span>02 // COLLECTIONS</span>
               <ArrowUpRight size={16} />
             </Link>
             <Link
@@ -174,7 +174,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
               className={styles.mobileNavLink}
               onClick={() => setMobileMenuOpen(false)}
             >
-              <span>03 // TOKYO LOOKBOOK</span>
+              <span>03 // LOOKBOOK</span>
               <ArrowUpRight size={16} />
             </Link>
             <Link
@@ -182,19 +182,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
               className={styles.mobileNavLink}
               onClick={() => setMobileMenuOpen(false)}
             >
-              <span>04 // CRAFTSMANSHIP & GSM</span>
+              <span>04 // JOURNAL</span>
               <ArrowUpRight size={16} />
             </Link>
           </nav>
 
           <div className={styles.mobileDrawerFooter}>
             <p className={styles.mobileFooterText}>
-              LIMITED EDITION 500 GSM STREETWEAR. CRAFTED IN TOKYO. WORLDWIDE EXPEDITIONS.
+              LIMITED EDITION 500 GSM STREETWEAR. CRAFTED IN TOKYO. WORLDWIDE VOYAGE DISPATCH.
             </p>
-            <div className={styles.mobileCoords}>35.6580° N, 139.7016° E</div>
+            <div className={styles.mobileCoords}>TOKYO HQ // 35.6580° N, 139.7016° E</div>
           </div>
         </div>
       </div>
     </>
   );
 };
+
+
+
+
