@@ -11,12 +11,14 @@ interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectProduct: (product: Product) => void;
+  products?: Product[];
 }
 
 export const SearchModal: React.FC<SearchModalProps> = ({
   isOpen,
   onClose,
   onSelectProduct,
+  products = PRODUCTS,
 }) => {
   const [query, setQuery] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -34,7 +36,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   if (!isOpen) return null;
 
-  const filteredProducts = PRODUCTS.filter((p) => {
+  const filteredProducts = products.filter((p) => {
     const q = query.toLowerCase().trim();
     if (!q) return true;
     return (

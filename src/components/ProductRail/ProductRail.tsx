@@ -13,6 +13,7 @@ import styles from './ProductRail.module.css';
 
 interface ProductRailProps {
   onOpenQuickView: (product: Product) => void;
+  products?: Product[];
 }
 
 const COLLECTION_STORIES = [
@@ -139,7 +140,7 @@ export const ProductRail: React.FC<ProductRailProps> = ({ onOpenQuickView }) => 
     }
 
     return result;
-  }, [activeCategory, activeSort]);
+  }, [PRODUCTS, activeCategory, activeSort]);
 
   return (
     <section id="collection" className={styles.section} aria-label="Streetwear Collection Archive">
