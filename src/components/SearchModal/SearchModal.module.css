@@ -1,0 +1,238 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(4, 4, 4, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 700;
+  display: flex;
+  justify-content: center;
+  padding: 80px 24px 40px;
+  overflow-y: auto;
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.searchHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.inputWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #111111;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-xs);
+  padding: 16px 20px;
+  transition: border-color var(--transition-fast);
+}
+
+.inputWrapper:focus-within {
+  border-color: var(--accent-crimson);
+}
+
+.searchIcon {
+  color: var(--accent-crimson);
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  outline: none;
+}
+
+.clearBtn {
+  color: var(--text-muted);
+}
+
+.closeBtn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--text-secondary);
+  padding: 16px 20px;
+  background: rgba(244, 240, 232, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  transition: all var(--transition-fast);
+}
+
+.closeBtn:hover {
+  background: var(--accent-crimson);
+  color: #fff;
+}
+
+/* Trending */
+.trendingRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.trendingLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+.trendingTags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.trendingTag {
+  padding: 6px 12px;
+  background: rgba(244, 240, 232, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.trendingTag:hover {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+}
+
+/* Results */
+.resultsArea {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.resultsHeader {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--accent-gold);
+  border-bottom: 1px solid rgba(244, 240, 232, 0.06);
+  padding-bottom: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.resultCard {
+  display: flex;
+  gap: 14px;
+  padding: 12px;
+  background: #0f0f0f;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.resultCard:hover {
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+  background: #141414;
+}
+
+.imgWrapper {
+  position: relative;
+  width: 70px;
+  height: 90px;
+  background: #181818;
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.img {
+  object-fit: cover;
+}
+
+.gsmPill {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: var(--accent-gold);
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.cardInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cardCrew {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--accent-crimson);
+}
+
+.cardTitle {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.cardBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardPrice {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.inspectHint {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .backdrop {
+    padding: 60px 16px 20px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

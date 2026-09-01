@@ -1,0 +1,366 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  transition: background-color var(--transition-smooth), border-color var(--transition-smooth), backdrop-filter var(--transition-smooth);
+  background: linear-gradient(180deg, rgba(8, 8, 8, 0.95) 0%, rgba(8, 8, 8, 0.7) 70%, transparent 100%);
+}
+
+.scrolled {
+  background: rgba(8, 8, 8, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Top Telemetry */
+.telemetryBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 32px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(244, 240, 232, 0.04);
+}
+
+.telemetryContent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.telemetryDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-crimson);
+  box-shadow: 0 0 8px var(--accent-crimson);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.telemetryDivider {
+  opacity: 0.3;
+}
+
+.telemetryCoords {
+  color: var(--text-secondary);
+}
+
+.telemetryRight {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.currencyBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.currencyBtn:hover {
+  color: var(--text-primary);
+}
+
+.badgeFreeShip {
+  color: var(--accent-gold);
+  font-weight: 500;
+}
+
+/* Nav Main Container */
+.navContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+  max-width: 1720px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.mobileMenuTrigger {
+  display: none;
+  color: var(--text-primary);
+}
+
+/* Desktop Links */
+.desktopNav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.navLink {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  color: var(--text-secondary);
+  position: relative;
+  padding: 6px 0;
+  transition: color var(--transition-fast);
+}
+
+.navLink:hover {
+  color: var(--text-primary);
+}
+
+.navIndicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--accent-crimson);
+  transition: width var(--transition-smooth);
+}
+
+.navLink:hover .navIndicator {
+  width: 100%;
+}
+
+/* Brand Identity */
+.brandContainer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.brandLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.japaneseWordmark {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--accent-crimson);
+  font-weight: 700;
+}
+
+.brandTitle {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.brandSubtitle {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.28em;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-xs);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  position: relative;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.actionBtn:hover {
+  background-color: rgba(244, 240, 232, 0.05);
+  color: #ffffff;
+}
+
+.actionLabel {
+  display: inline-block;
+}
+
+.badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: var(--accent-crimson);
+  color: #fff;
+  font-size: 9px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cartBtn {
+  background-color: rgba(244, 240, 232, 0.06);
+  border: 1px solid var(--border-subtle);
+  padding: 8px 14px;
+}
+
+.cartBtn:hover {
+  background-color: rgba(181, 18, 27, 0.15);
+  border-color: var(--border-crimson);
+}
+
+.cartLabel {
+  font-weight: 600;
+}
+
+.cartCountBadge {
+  background-color: var(--accent-crimson);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+/* Mobile Drawer */
+.mobileDrawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0a0a0a;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  transform: translateX(-100%);
+  transition: transform var(--transition-smooth);
+}
+
+.mobileDrawerOpen {
+  transform: translateX(0);
+}
+
+.mobileDrawerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.brandTitleMobile {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.closeBtn {
+  color: var(--text-secondary);
+  padding: 8px;
+}
+
+.mobileDrawerBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  padding: 40px 0 20px;
+}
+
+.mobileNavLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.mobileNavLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(244, 240, 232, 0.04);
+  color: var(--text-primary);
+}
+
+.mobileDrawerFooter {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 20px;
+}
+
+.mobileFooterText {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.mobileCoords {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent-crimson);
+  margin-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .desktopNav {
+    display: none;
+  }
+  .mobileMenuTrigger {
+    display: block;
+  }
+  .telemetryCoords {
+    display: none;
+  }
+  .actionLabel {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .telemetryBar {
+    padding: 6px 16px;
+    font-size: 9px;
+  }
+  .navContainer {
+    padding: 10px 16px;
+  }
+  .badgeFreeShip {
+    display: none;
+  }
+  .brandTitle {
+    font-size: 16px;
+  }
+}

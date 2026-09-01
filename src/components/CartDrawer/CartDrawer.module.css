@@ -1,0 +1,468 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(4, 4, 4, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 600;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.drawer {
+  width: 100%;
+  max-width: 480px;
+  height: 100vh;
+  background: #0c0c0c;
+  border-left: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -16px 0 48px rgba(0, 0, 0, 0.9);
+  animation: slideDrawer 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideDrawer {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Header */
+.drawerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bagIcon {
+  color: var(--accent-crimson);
+}
+
+.drawerTitle {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+}
+
+.closeBtn {
+  color: var(--text-secondary);
+  padding: 6px;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.closeBtn:hover {
+  color: #fff;
+  background: rgba(244, 240, 232, 0.08);
+}
+
+/* Shipping Progress Bar */
+.shippingBar {
+  padding: 16px 24px;
+  background: #111111;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shippingText {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+}
+
+.shippingText strong {
+  color: var(--accent-gold);
+}
+
+.freeShipAchieved {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.progressBarTrack {
+  width: 100%;
+  height: 4px;
+  background: rgba(244, 240, 232, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-crimson) 0%, var(--accent-gold) 100%);
+  transition: width var(--transition-smooth);
+}
+
+/* Items List */
+.itemList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  gap: 14px;
+  color: var(--text-secondary);
+}
+
+.emptyIconWrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(244, 240, 232, 0.03);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.emptyState h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.emptyState p {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+.shopNowBtn {
+  margin-top: 8px;
+  padding: 12px 24px;
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  border-radius: var(--radius-xs);
+  transition: all var(--transition-fast);
+}
+
+.shopNowBtn:hover {
+  background: var(--accent-crimson);
+  color: #fff;
+}
+
+/* Cart Item */
+.cartItem {
+  display: flex;
+  gap: 16px;
+  padding: 14px;
+  background: rgba(244, 240, 232, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+}
+
+.itemImgWrapper {
+  position: relative;
+  width: 76px;
+  height: 98px;
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  background: #141414;
+  flex-shrink: 0;
+}
+
+.itemImg {
+  object-fit: cover;
+}
+
+.itemInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.itemHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.itemName {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.deleteBtn {
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+  padding: 2px;
+}
+
+.deleteBtn:hover {
+  color: var(--accent-crimson);
+}
+
+.itemMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.itemSizeBadge {
+  color: var(--text-secondary);
+}
+
+.itemGsmBadge {
+  color: var(--accent-gold);
+}
+
+.itemBottomRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  background: rgba(244, 240, 232, 0.04);
+}
+
+.stepBtn {
+  padding: 4px 8px;
+  color: var(--text-secondary);
+}
+
+.qtyText {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 6px;
+}
+
+.itemPrice {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Footer */
+.drawerFooter {
+  padding: 20px 24px 24px;
+  background: #0f0f0f;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.promoForm {
+  display: flex;
+  gap: 8px;
+}
+
+.promoInputWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #141414;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 0 12px;
+}
+
+.tagIcon {
+  color: var(--text-muted);
+}
+
+.promoInput {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 10px 0;
+  outline: none;
+}
+
+.applyBtn {
+  padding: 0 16px;
+  background: rgba(244, 240, 232, 0.08);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.applyBtn:hover {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+}
+
+.feedback {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 2px;
+}
+
+.feedbackSuccess {
+  background: rgba(74, 222, 128, 0.1);
+  color: #4ade80;
+}
+
+.feedbackError {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.activePromoTag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--accent-crimson-subtle);
+  border: 1px solid var(--border-crimson);
+  padding: 6px 12px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent-crimson);
+  font-weight: 700;
+}
+
+.removePromoBtn {
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+.removePromoBtn:hover {
+  color: #fff;
+}
+
+/* Summary Rows */
+.summaryRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(244, 240, 232, 0.04);
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.summaryRow span {
+  color: var(--text-muted);
+}
+
+.summaryRow strong {
+  color: var(--text-primary);
+}
+
+.discountRow strong {
+  color: var(--accent-crimson);
+}
+
+.freeText {
+  color: #4ade80 !important;
+}
+
+.totalRow {
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 13px;
+}
+
+.totalRow span {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.totalPrice {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* Checkout Button */
+.checkoutBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--accent-crimson);
+  color: #fff;
+  padding: 16px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  transition: all var(--transition-fast);
+}
+
+.checkoutBtn:hover {
+  background: var(--accent-crimson-hover);
+  box-shadow: 0 8px 24px var(--accent-crimson-glow);
+}
+
+.secureNotice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
