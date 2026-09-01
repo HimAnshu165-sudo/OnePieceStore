@@ -5,61 +5,71 @@
   width: 100%;
   z-index: 100;
   transition: background-color var(--transition-smooth), border-color var(--transition-smooth), backdrop-filter var(--transition-smooth);
-  background: linear-gradient(180deg, rgba(8, 8, 8, 0.95) 0%, rgba(8, 8, 8, 0.7) 70%, transparent 100%);
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.98) 0%, rgba(6, 6, 6, 0.82) 75%, transparent 100%);
 }
 
 .scrolled {
-  background: rgba(8, 8, 8, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(6, 6, 6, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
 }
 
-/* Top Telemetry */
+/* Top Utility Bar */
 .telemetryBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 32px;
+  padding: 6px 36px;
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
   color: var(--text-muted);
-  border-bottom: 1px solid rgba(244, 240, 232, 0.04);
+  border-bottom: 1px solid rgba(245, 242, 235, 0.05);
 }
 
-.telemetryContent {
+.telemetryLeft {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .telemetryDot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background-color: var(--accent-crimson);
   box-shadow: 0 0 8px var(--accent-crimson);
-  animation: pulseDot 2s infinite ease-in-out;
+  animation: pulseDot 2.2s infinite ease-in-out;
 }
 
 @keyframes pulseDot {
-  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
   50% { opacity: 1; transform: scale(1.1); }
 }
 
-.telemetryDivider {
-  opacity: 0.3;
+.utilityTag {
+  color: #f5f2eb;
+  font-weight: 700;
+  letter-spacing: 0.18em;
 }
 
-.telemetryCoords {
-  color: var(--text-secondary);
+.telemetryCenter {
+  color: rgba(245, 242, 235, 0.6);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  font-weight: 500;
 }
 
 .telemetryRight {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
+}
+
+.utilityDivider {
+  opacity: 0.25;
 }
 
 .currencyBtn {
@@ -67,8 +77,8 @@
   align-items: center;
   gap: 5px;
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
   color: var(--text-secondary);
   transition: color var(--transition-fast);
 }
@@ -79,7 +89,8 @@
 
 .badgeFreeShip {
   color: var(--accent-gold);
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.12em;
 }
 
 /* Nav Main Container */
@@ -87,8 +98,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 32px;
-  max-width: 1720px;
+  padding: 12px 48px;
+  max-width: var(--container-max);
   margin: 0 auto;
   position: relative;
 }
@@ -106,18 +117,18 @@
 }
 
 .navLink {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
   letter-spacing: 0.16em;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-weight: 600;
+  color: #a8a49c;
   position: relative;
   padding: 6px 0;
   transition: color var(--transition-fast);
 }
 
 .navLink:hover {
-  color: var(--text-primary);
+  color: #ffffff;
 }
 
 .navIndicator {
@@ -125,7 +136,7 @@
   bottom: 0;
   left: 0;
   width: 0;
-  height: 1px;
+  height: 1.5px;
   background-color: var(--accent-crimson);
   transition: width var(--transition-smooth);
 }
@@ -149,54 +160,48 @@
   gap: 2px;
 }
 
-.japaneseWordmark {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  letter-spacing: 0.4em;
-  color: var(--accent-crimson);
-  font-weight: 700;
-}
-
 .brandTitle {
   font-family: var(--font-display);
   font-size: 20px;
   font-weight: 800;
-  letter-spacing: 0.18em;
-  color: var(--text-primary);
+  letter-spacing: 0.24em;
+  color: #ffffff;
   line-height: 1;
 }
 
-.brandSubtitle {
+.japaneseSublabel {
   font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.28em;
-  color: var(--text-muted);
-  font-weight: 500;
+  font-size: 8.5px;
+  letter-spacing: 0.26em;
+  color: var(--accent-gold);
+  font-weight: 600;
+  opacity: 0.85;
 }
 
 /* Actions */
 .actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 
 .actionBtn {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   padding: 8px 12px;
   border-radius: var(--radius-xs);
-  color: var(--text-primary);
-  font-family: var(--font-mono);
+  color: #d1ccc2;
+  font-family: var(--font-sans);
   font-size: 11px;
-  letter-spacing: 0.12em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   position: relative;
   transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .actionBtn:hover {
-  background-color: rgba(244, 240, 232, 0.05);
+  background-color: rgba(245, 242, 235, 0.06);
   color: #ffffff;
 }
 
@@ -222,18 +227,20 @@
 }
 
 .cartBtn {
-  background-color: rgba(244, 240, 232, 0.06);
-  border: 1px solid var(--border-subtle);
-  padding: 8px 14px;
+  background-color: rgba(245, 242, 235, 0.05);
+  border: 1px solid rgba(245, 242, 235, 0.12);
+  padding: 7px 14px;
+  border-radius: var(--radius-xs);
 }
 
 .cartBtn:hover {
-  background-color: rgba(181, 18, 27, 0.15);
+  background-color: rgba(181, 18, 27, 0.18);
   border-color: var(--border-crimson);
+  color: #ffffff;
 }
 
 .cartLabel {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .cartCountBadge {
@@ -243,7 +250,7 @@
   font-size: 10px;
   font-weight: 700;
   padding: 1px 6px;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 /* Mobile Drawer */
@@ -253,7 +260,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #0a0a0a;
+  background-color: #090909;
   z-index: 200;
   display: flex;
   flex-direction: column;
@@ -309,7 +316,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   padding: 12px 0;
-  border-bottom: 1px solid rgba(244, 240, 232, 0.04);
+  border-bottom: 1px solid rgba(245, 242, 235, 0.04);
   color: var(--text-primary);
 }
 
@@ -341,10 +348,10 @@
   .mobileMenuTrigger {
     display: block;
   }
-  .telemetryCoords {
+  .actionLabel {
     display: none;
   }
-  .actionLabel {
+  .telemetryCenter {
     display: none;
   }
 }
@@ -364,3 +371,6 @@
     font-size: 16px;
   }
 }
+
+
+

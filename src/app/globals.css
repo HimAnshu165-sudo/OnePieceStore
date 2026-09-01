@@ -1,35 +1,63 @@
 :root {
-  --bg-main: #070707;
-  --bg-surface: #0f0f0f;
-  --bg-elevated: #161616;
-  --bg-translucent: rgba(15, 15, 15, 0.85);
+  /* Color Palette — Premium Dark Japanese Editorial */
+  --bg-main: #060606;
+  --bg-surface: #0e0e0e;
+  --bg-elevated: #151515;
+  --bg-card: #111111;
+  --bg-translucent: rgba(14, 14, 14, 0.88);
+  --bg-glass: rgba(18, 18, 18, 0.72);
 
-  --text-primary: #f4f0e8;
-  --text-secondary: #a6a29a;
-  --text-muted: #625e57;
-  --text-inverse: #080808;
+  /* Typography Colors */
+  --text-primary: #f5f2eb;
+  --text-secondary: #a8a49c;
+  --text-muted: #646059;
+  --text-inverse: #070707;
 
+  /* Accent Palette — Controlled Crimson & Aged Gold */
   --accent-crimson: #b5121b;
-  --accent-crimson-hover: #d31823;
-  --accent-crimson-glow: rgba(181, 18, 27, 0.25);
+  --accent-crimson-hover: #d41722;
+  --accent-crimson-glow: rgba(181, 18, 27, 0.28);
   --accent-crimson-subtle: rgba(181, 18, 27, 0.12);
 
   --accent-gold: #c7a76c;
   --accent-gold-subtle: rgba(199, 167, 108, 0.15);
 
-  --border-subtle: rgba(244, 240, 232, 0.08);
-  --border-medium: rgba(244, 240, 232, 0.16);
-  --border-crimson: rgba(181, 18, 27, 0.4);
+  /* Technical Hairline Borders */
+  --border-subtle: rgba(245, 242, 235, 0.08);
+  --border-medium: rgba(245, 242, 235, 0.15);
+  --border-strong: rgba(245, 242, 235, 0.25);
+  --border-crimson: rgba(181, 18, 27, 0.45);
 
+  /* Typography Families */
   --font-display: var(--font-syne), 'Syne', sans-serif;
   --font-sans: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
   --font-mono: var(--font-space), 'Space Grotesk', monospace;
 
+  /* Restrained Sharp Corner Radii */
   --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
 
+  /* Global Spacing Scale */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 64px;
+  --space-2xl: 96px;
+
+  /* Page Layout Gutters */
+  --container-max: 1720px;
+  --container-width: 1720px;
+  --space-6: 48px;
+  --gutter-desktop: 48px;
+  --gutter-tablet: 32px;
+  --gutter-mobile: 20px;
+  --section-padding: 110px;
+
+  /* Transition Curves */
   --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-smooth: 0.36s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-lux: 0.55s cubic-bezier(0.16, 1, 0.3, 1);
@@ -61,8 +89,8 @@ body {
 
 /* Luxury Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -70,7 +98,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #252422;
+  background: #222120;
   border-radius: var(--radius-xs);
 }
 
@@ -102,7 +130,7 @@ img, video {
   display: block;
 }
 
-/* Atmospheric Noise / Vignette Overlay */
+/* Atmospheric Noise / Japanese Paper Texture Overlay */
 .grain-overlay {
   position: fixed;
   top: 0;
@@ -111,8 +139,110 @@ img, video {
   height: 100vh;
   pointer-events: none;
   z-index: 999;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Japanese Editorial Typography Hierarchy */
+.eyebrow-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--accent-crimson);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.editorial-headline {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4.5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.body-text {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.technical-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+/* Japanese Editorial Accent Utilities */
+.writing-vertical-jp {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 0.25em;
+  font-family: var(--font-sans);
+}
+
+.hanko-stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--accent-crimson);
+  color: var(--accent-crimson);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 2px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: var(--accent-crimson-subtle);
+}
+
+.manga-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--border-medium) 30%, var(--border-medium) 70%, transparent 100%);
+  margin: var(--space-lg) 0;
+}
+
+.manga-panel {
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+/* Keyframe Animations */
+@keyframes sonarPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@keyframes liveDotPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes marqueeInfinite {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 /* Accessibility Focus States */
@@ -131,3 +261,4 @@ img, video {
     scroll-behavior: auto !important;
   }
 }
+

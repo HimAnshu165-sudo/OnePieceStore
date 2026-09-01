@@ -1,312 +1,437 @@
 .section {
   width: 100%;
-  padding: 100px 0 120px;
+  padding: 120px 0 140px;
   background-color: var(--bg-main);
   position: relative;
+  overflow: hidden;
+}
+
+/* Subtle Background Watermark */
+.bgWatermark {
+  position: absolute;
+  top: 60px;
+  right: 5%;
+  font-family: var(--font-display);
+  font-size: clamp(140px, 20vw, 320px);
+  font-weight: 900;
+  color: rgba(245, 242, 235, 0.02);
+  line-height: 1;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
 }
 
 .innerContainer {
   max-width: 1720px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 48px;
+  position: relative;
+  z-index: 1;
 }
 
-/* Header */
+/* 01 — Section Editorial Header */
 .sectionHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 48px;
-  gap: 32px;
+  margin-bottom: 56px;
+  gap: 40px;
 }
 
 .headerLeft {
-  max-width: 650px;
+  max-width: 620px;
 }
 
-.headerSuper {
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  color: var(--accent-crimson);
-  font-weight: 700;
-  display: block;
-  margin-bottom: 8px;
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  color: #a8a49c;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.crimsonDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--accent-crimson);
+  box-shadow: 0 0 8px var(--accent-crimson);
 }
 
 .headerTitle {
   font-family: var(--font-display);
-  font-size: clamp(36px, 4.5vw, 64px);
+  font-size: clamp(34px, 4.2vw, 56px);
   font-weight: 800;
   letter-spacing: -0.01em;
-  color: var(--text-primary);
+  color: #ffffff;
   line-height: 1.05;
   text-transform: uppercase;
   margin-bottom: 16px;
 }
 
 .crimsonAccent {
-  color: var(--accent-crimson);
+  color: #ff2a38;
+  display: inline-block;
 }
 
 .headerSubtitle {
   font-family: var(--font-sans);
   font-size: 15px;
-  line-height: 1.6;
-  color: var(--text-secondary);
+  line-height: 1.65;
+  color: #a8a49c;
+  max-width: 480px;
 }
 
+/* 02 — Editorial Garment Label Stamp */
 .headerRight {
   display: flex;
   align-items: center;
 }
 
-.guaranteePill {
+.editorialGarmentTag {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: rgba(18, 18, 18, 0.7);
-  border: 1px solid var(--border-subtle);
-  padding: 14px 20px;
-  border-radius: var(--radius-xs);
-  backdrop-filter: blur(8px);
+  padding: 12px 18px;
+  border-left: 2px solid var(--accent-crimson);
+  background: rgba(14, 14, 14, 0.4);
 }
 
-.guaranteeIcon {
-  color: var(--accent-gold);
-  flex-shrink: 0;
-}
-
-.guaranteePill strong {
-  font-family: var(--font-mono);
-  font-size: 11px;
+.hankoSeal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #e51b24;
+  color: #ff3344;
+  background: rgba(229, 27, 36, 0.12);
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 6px;
+  border-radius: 2px;
   letter-spacing: 0.12em;
-  color: var(--text-primary);
-  display: block;
-  margin-bottom: 2px;
+  text-shadow: 0 0 6px rgba(229, 27, 36, 0.4);
 }
 
-.guaranteePill p {
+.tagContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tagTitle {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: #f5f2eb;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tagSubtitle {
   font-family: var(--font-mono);
   font-size: 9px;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
+  letter-spacing: 0.14em;
+  color: #7a766e;
 }
 
-/* Asymmetric Hero Spotlight */
-.heroSpotlight {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  background: #0f0f0f;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xs);
-  padding: 32px;
+/* 03 — 5 Collection Stories Strip */
+.storiesContainer {
+  width: 100%;
   margin-bottom: 56px;
-  cursor: pointer;
-  transition: border-color var(--transition-smooth);
-}
-
-.heroSpotlight:hover {
-  border-color: var(--border-medium);
-}
-
-.spotlightVisual {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border-radius: var(--radius-xs);
-  background: #141414;
-}
-
-.spotlightImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  transition: transform var(--transition-lux);
-}
-
-.heroSpotlight:hover .spotlightImg {
-  transform: scale(1.04);
-}
-
-.spotlightBadge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
   display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.storiesHeader {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  background: rgba(181, 18, 27, 0.9);
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: var(--radius-xs);
+  border-bottom: 1px solid rgba(245, 242, 235, 0.08);
+  padding-bottom: 12px;
+}
+
+.storiesSuper {
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #8c8880;
+  text-transform: uppercase;
+}
+
+.storiesHint {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
   letter-spacing: 0.16em;
-}
-
-.spotlightDetails {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 16px;
-}
-
-.spotlightMeta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-}
-
-.spotlightEdition {
-  color: var(--accent-crimson);
-  font-weight: 700;
-}
-
-.spotlightGsm {
   color: var(--accent-gold);
-  border-left: 1px solid var(--border-subtle);
-  padding-left: 16px;
+  font-weight: 600;
 }
 
-.spotlightTitle {
-  font-family: var(--font-display);
-  font-size: clamp(24px, 2.5vw, 36px);
-  font-weight: 800;
-  color: var(--text-primary);
-  line-height: 1.2;
-}
-
-.spotlightStory {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-}
-
-.spotlightSpecs {
+.storiesTrack {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  padding: 16px 0;
-  border-top: 1px solid var(--border-subtle);
-  border-bottom: 1px solid var(--border-subtle);
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
 }
 
-.specBox {
+.storiesTrack::-webkit-scrollbar {
+  display: none;
+}
+
+.storyCard {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-}
-
-.specBox span {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  color: var(--text-muted);
-}
-
-.specBox strong {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-primary);
-}
-
-.spotlightActionRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-}
-
-.spotlightPrice {
-  display: flex;
-  align-items: baseline;
   gap: 12px;
-}
-
-.spotlightPrice span:first-child {
-  font-family: var(--font-mono);
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-.comparePrice {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  color: var(--text-muted);
-  text-decoration: line-through;
-}
-
-.spotlightInspectBtn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--text-primary);
-  color: var(--text-inverse);
-  padding: 12px 24px;
+  cursor: pointer;
+  padding: 12px;
+  background: rgba(14, 14, 14, 0.5);
+  border: 1px solid rgba(245, 242, 235, 0.08);
   border-radius: var(--radius-xs);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
   transition: all var(--transition-fast);
 }
 
-.spotlightInspectBtn:hover {
-  background: var(--accent-crimson);
-  color: #fff;
+.storyCard:hover {
+  background: rgba(24, 24, 24, 0.8);
+  border-color: rgba(245, 242, 235, 0.25);
+  transform: translateY(-2px);
 }
 
-/* Product Grid */
+.activeStoryCard {
+  background: rgba(24, 24, 24, 0.95);
+  border-color: var(--accent-crimson);
+  box-shadow: 0 4px 20px rgba(181, 18, 27, 0.15);
+}
+
+.storyImgWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 2px;
+  overflow: hidden;
+  background-color: #0d0d0d;
+}
+
+.storyImg {
+  object-fit: cover;
+  object-position: center;
+  transition: transform var(--transition-smooth);
+}
+
+.storyCard:hover .storyImg {
+  transform: scale(1.05);
+}
+
+.storyOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, transparent 40%, rgba(6, 6, 6, 0.75) 100%);
+}
+
+.storyNum {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  background: rgba(6, 6, 6, 0.85);
+  padding: 2px 6px;
+  border-radius: 2px;
+  color: #f5f2eb;
+  font-weight: 700;
+}
+
+.storyMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.storyTitle {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.storyJapanese {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  color: var(--accent-crimson);
+  font-weight: 600;
+}
+
+.storyMood {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  line-height: 1.4;
+  color: #7a766e;
+  margin-top: 2px;
+}
+
+/* 06 — Product Grid */
 .productGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 40px 28px;
+  gap: 48px 32px;
+  margin-bottom: 80px;
+}
+
+/* Editorial Visual Break */
+.editorialBreak {
+  width: 100%;
+  margin-top: 40px;
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(245, 242, 235, 0.1);
+  transition: border-color var(--transition-fast);
+}
+
+.editorialBreak:hover {
+  border-color: var(--accent-crimson);
+}
+
+.breakImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  padding: 48px 64px;
+}
+
+.breakImg {
+  object-fit: cover;
+  object-position: center 30%;
+  transition: transform var(--transition-lux);
+}
+
+.editorialBreak:hover .breakImg {
+  transform: scale(1.02);
+}
+
+.breakGradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(6, 6, 6, 0.92) 0%, rgba(6, 6, 6, 0.7) 45%, transparent 100%);
+  z-index: 1;
+}
+
+.breakContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 520px;
+}
+
+.breakBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+.breakHeadline {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.breakCopy {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: #ded9cf;
+  line-height: 1.6;
+}
+
+.breakAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  color: var(--accent-crimson);
+  font-weight: 700;
+  transition: transform var(--transition-fast);
+}
+
+.editorialBreak:hover .breakAction {
+  transform: translateX(4px);
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .innerContainer {
+    padding: 0 32px;
+  }
   .sectionHeader {
     flex-direction: column;
     align-items: flex-start;
-  }
-  .heroSpotlight {
-    grid-template-columns: 1fr;
     gap: 24px;
-    padding: 20px;
   }
-  .spotlightSpecs {
-    grid-template-columns: 1fr;
-    gap: 8px;
+  .storiesTrack {
+    grid-template-columns: repeat(5, 260px);
   }
   .productGrid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 32px 20px;
+    gap: 36px 20px;
+  }
+  .breakImageWrapper {
+    height: 320px;
+    padding: 32px 36px;
   }
 }
 
 @media (max-width: 640px) {
+  .section {
+    padding: 80px 0 100px;
+  }
   .innerContainer {
-    padding: 0 16px;
+    padding: 0 20px;
   }
-  .spotlightActionRow {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
+  .headerTitle {
+    font-size: 32px;
   }
-  .spotlightInspectBtn {
-    justify-content: center;
+  .storiesTrack {
+    grid-template-columns: repeat(5, 220px);
   }
   .productGrid {
     grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .breakImageWrapper {
+    height: 280px;
+    padding: 24px 20px;
   }
 }
+
