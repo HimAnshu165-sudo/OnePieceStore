@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Product } from '@/types';
 import { PRODUCTS } from '@/data/products';
 import { Navbar } from '@/components/Navbar/Navbar';
@@ -17,9 +17,28 @@ import { WishlistDrawer } from '@/components/WishlistDrawer/WishlistDrawer';
 import { CheckoutModal } from '@/components/CheckoutModal/CheckoutModal';
 
 export default function Home() {
+  const [products, setProducts] = useState<Product[]>(PRODUCTS);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch('/api/products');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.products && Array.isArray(data.products) && data.products.length > 0) {
+            setProducts(data.products);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not fetch dynamic products from MongoDB, utilizing offline fallback data:', err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleOpenProduct = (product: Product) => {
     setSelectedProduct(product);
@@ -30,7 +49,7 @@ export default function Home() {
   };
 
   const handleExploreProductFromLookbook = (productId: string) => {
-    const found = PRODUCTS.find((p) => p.id === productId);
+    const found = products.find((p) => p.id === productId) || PRODUCTS.find((p) => p.id === productId);
     if (found) {
       setSelectedProduct(found);
     }
@@ -51,7 +70,7 @@ export default function Home() {
       <Marquee />
 
       {/* Curated Product Collection */}
-      <ProductRail onOpenQuickView={handleOpenProduct} />
+      <ProductRail products={products} onOpenQuickView={handleOpenProduct} />
 
       {/* Tokyo Lookbook Campaign */}
       <Lookbook onExploreProduct={handleExploreProductFromLookbook} />
@@ -76,6 +95,7 @@ export default function Home() {
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         onSelectProduct={handleOpenProduct}
+        products={products}
       />
 
       <CartDrawer
