@@ -34,7 +34,10 @@ export const PRODUCTS: Product[] = [
     stock: 14,
     images: [
       '/images/luffy-sun-god.jpg',
-      '/images/lookbook-craft.jpg'
+      '/images/collection-red-hair.jpg',
+      '/images/editorial-luffy-hoodie.jpg',
+      '/images/detail-embroidery-nika.jpg',
+      '/images/detail-woven-label.jpg'
     ],
     tags: ['Oversized', 'Heavyweight', 'Limited Edition', 'Sun God'],
     isNewDrop: true,
@@ -74,6 +77,8 @@ export const PRODUCTS: Product[] = [
     stock: 9,
     images: [
       '/images/zoro-oni-cut.jpg',
+      '/images/editorial-zoro-wano.jpg',
+      '/images/detail-wano-dragon.jpg',
       '/images/lookbook-craft.jpg'
     ],
     tags: ['Swordsman', 'Wano', 'Drop Shoulder'],
@@ -112,7 +117,9 @@ export const PRODUCTS: Product[] = [
     stock: 7,
     images: [
       '/images/law-room-tee.jpg',
-      '/images/lookbook-craft.jpg'
+      '/images/wano-ronin.jpg',
+      '/images/editorial-law-parka.jpg',
+      '/images/detail-zipper-hardware.jpg'
     ],
     tags: ['Heart Pirates', 'Tactical', 'Ultra Heavyweight'],
     isLimited: true,
@@ -152,7 +159,9 @@ export const PRODUCTS: Product[] = [
     stock: 12,
     images: [
       '/images/shanks-emperor.jpg',
-      '/images/lookbook-craft.jpg'
+      '/images/editorial-shanks-bomber.jpg',
+      '/images/collection-red-hair.jpg',
+      '/images/detail-woven-label.jpg'
     ],
     tags: ['Emperor', 'Conqueror', 'Vintage Wash'],
     isNewDrop: true,
@@ -191,6 +200,8 @@ export const PRODUCTS: Product[] = [
     stock: 18,
     images: [
       '/images/marine-justice.jpg',
+      '/images/editorial-marine-trench.jpg',
+      '/images/collection-east-blue.jpg',
       '/images/lookbook-craft.jpg'
     ],
     tags: ['Marine HQ', 'Minimalist', 'Off-White'],
@@ -229,7 +240,9 @@ export const PRODUCTS: Product[] = [
     stock: 11,
     images: [
       '/images/sanji-diable.jpg',
-      '/images/lookbook-craft.jpg'
+      '/images/collection-east-blue.jpg',
+      '/images/editorial-sanji-suit.jpg',
+      '/images/detail-embroidery-nika.jpg'
     ],
     tags: ['Stealth', 'Straw Hat', 'Embroidered'],
     isNewDrop: false,
@@ -268,7 +281,9 @@ export const PRODUCTS: Product[] = [
     stock: 5,
     images: [
       '/images/wano-ronin.jpg',
-      '/images/lookbook-craft.jpg'
+      '/images/zoro-oni-cut.jpg',
+      '/images/detail-wano-dragon.jpg',
+      '/images/editorial-zoro-wano.jpg'
     ],
     tags: ['Wano', 'Dragon', 'Ukiyo-e', 'Limited Edition'],
     isNewDrop: true,
@@ -286,3 +301,4 @@ export const CREW_CATEGORIES = [
   { id: 'MARINE', label: 'Marine Headquarters', count: 1, badge: 'JUSTICE' },
   { id: 'WANO', label: 'Wano Ronin Archive', count: 1, badge: 'RARE' },
 ];
+

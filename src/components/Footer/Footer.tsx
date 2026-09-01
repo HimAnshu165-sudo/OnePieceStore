@@ -2,129 +2,177 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, Check, ShieldCheck, Globe, Send } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Check, ShieldCheck, Globe, Lock } from 'lucide-react';
 import styles from './Footer.module.css';
 
 export const Footer: React.FC = () => {
   const [email, setEmail] = useState<string>('');
-  const [subscribed, setSubscribed] = useState<boolean>(false);
+  const [isEnlisted, setIsEnlisted] = useState<boolean>(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    setSubscribed(true);
+    setIsEnlisted(true);
   };
 
   return (
-    <footer className={styles.footer} aria-label="Grand Line Supply Footer">
+    <footer className={styles.footer} aria-label="Shin Sekai Global Fashion Archive">
       <div className={styles.container}>
-        {/* Newsletter Section */}
-        <div className={styles.newsletterCard}>
-          <div className={styles.newsletterLeft}>
-            <span className={styles.newsletterSuper}>PRIORITY EXPEDITION DISPATCH</span>
-            <h3 className={styles.newsletterTitle}>JOIN THE GRAND LINE SYNDICATE</h3>
-            <p className={styles.newsletterDesc}>
-              Receive exclusive access to 250-piece private drops, early access codes, and archival lookbooks.
+        {/* SECTION 4 — PRIVATE ARCHIVE ENLISTMENT */}
+        <motion.div
+          className={styles.archiveEnlistmentCard}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className={styles.enlistLeft}>
+            <div className={styles.enlistEyebrow}>
+              <span className={styles.crimsonDot} />
+              <span>優先アクセス / PRIORITY ACCESS</span>
+            </div>
+            <h3 className={styles.enlistTitle}>ENTER THE ARCHIVE.</h3>
+            <p className={styles.enlistDesc}>
+              Receive first access to limited drops, archive releases, private lookbooks, and selected dispatches from the studio.
             </p>
           </div>
 
-          <div className={styles.newsletterRight}>
-            {subscribed ? (
-              <div className={styles.successBox}>
-                <Check size={18} className={styles.successIcon} />
-                <div>
-                  <strong>WELCOME TO THE CREW</strong>
-                  <p>Use code <strong>GRANDLINE15</strong> for 15% off your first voyage.</p>
+          <div className={styles.enlistRight}>
+            {isEnlisted ? (
+              <motion.div
+                className={styles.successState}
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className={styles.successBadge}>
+                  <Check size={16} />
                 </div>
-              </div>
+                <div className={styles.successInfo}>
+                  <strong>ACCESS REQUEST RECEIVED</strong>
+                  <span>Archive pass issued for {email}. Check your dispatch inbox.</span>
+                </div>
+              </motion.div>
             ) : (
-              <form onSubmit={handleSubscribe} className={styles.form}>
-                <input
-                  type="email"
-                  required
-                  placeholder="ENTER PIRATE / CREW EMAIL..."
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={styles.emailInput}
-                />
-                <button type="submit" className={styles.submitBtn} aria-label="Subscribe to newsletter">
-                  <span>ENLIST</span>
-                  <Send size={13} />
-                </button>
+              <form onSubmit={handleSubmit} className={styles.enlistForm}>
+                <div className={styles.inputWrapper}>
+                  <input
+                    type="email"
+                    required
+                    placeholder="YOUR EMAIL ADDRESS"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={styles.emailInput}
+                    aria-label="Your email address for archive enlistment"
+                  />
+                  <button type="submit" className={styles.enlistBtn} aria-label="Enter archive">
+                    <span>ENTER ARCHIVE</span>
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+                <span className={styles.privacyNote}>
+                  <Lock size={10} className={styles.privacyLock} />
+                  No noise. Only selected transmissions.
+                </span>
               </form>
             )}
           </div>
-        </div>
+        </motion.div>
 
-        {/* Footer Navigation Columns */}
-        <div className={styles.linksGrid}>
-          {/* Brand Info */}
-          <div className={styles.brandCol}>
-            <div className={styles.brandHeader}>
-              <span className={styles.jpWordmark}>新世界</span>
-              <h4 className={styles.brandTitle}>SHIN SEKAI</h4>
-              <span className={styles.brandSub}>GRAND LINE SUPPLY CO.</span>
-            </div>
-            <p className={styles.brandBio}>
-              Architectural streetwear inspired by One Piece mythology. Milled in Wakayama, designed in Tokyo, dispatched worldwide.
-            </p>
-            <div className={styles.coordinatesTag}>
-              <span>TOKYO HQ // 35.6580° N, 139.7016° E</span>
-            </div>
+        {/* SECTION 7 — LARGE BRAND STATEMENT */}
+        <div className={styles.brandHeroArea}>
+          <div className={styles.brandTitleRow}>
+            <h2 className={styles.bigBrandTitle}>SHIN SEKAI</h2>
+            <span className={styles.bigJpBrand}>新世界</span>
           </div>
-
-          {/* Column 1: Drops */}
-          <div className={styles.linkCol}>
-            <h5 className={styles.colTitle}>COLLECTION</h5>
-            <ul className={styles.linkList}>
-              <li><Link href="#collection">Sun God Heavyweight Cut</Link></li>
-              <li><Link href="#collection">Santoryu Oni Swordsman</Link></li>
-              <li><Link href="#collection">Room: Death Surgeon</Link></li>
-              <li><Link href="#collection">Red Hair Conqueror Tee</Link></li>
-              <li><Link href="#collection">Absolute Justice Minimalist</Link></li>
-            </ul>
-          </div>
-
-          {/* Column 2: Divisions */}
-          <div className={styles.linkCol}>
-            <h5 className={styles.colTitle}>DIVISIONS</h5>
-            <ul className={styles.linkList}>
-              <li><Link href="#drops">Straw Hat Syndicate</Link></li>
-              <li><Link href="#drops">Heart Pirates Fleet</Link></li>
-              <li><Link href="#drops">Emperor Squadron</Link></li>
-              <li><Link href="#drops">Marine Headquarters</Link></li>
-              <li><Link href="#drops">Wano Ronin Archive</Link></li>
-            </ul>
-          </div>
-
-          {/* Column 3: Atelier & Care */}
-          <div className={styles.linkCol}>
-            <h5 className={styles.colTitle}>ATELIER & CARE</h5>
-            <ul className={styles.linkList}>
-              <li><Link href="#story">500 GSM Loopback Textile</Link></li>
-              <li><Link href="#lookbook">Discharge Ink Screenprinting</Link></li>
-              <li><Link href="#story">Garment Washing Guide</Link></li>
-              <li><Link href="#collection">Metal Certificate Authentication</Link></li>
-              <li><Link href="#collection">Global Maritime Logistics</Link></li>
-            </ul>
+          <div className={styles.brandSubStatement}>
+            <span>BUILT FOR THE JOURNEY BEYOND.</span>
+            <span className={styles.brandJpMotto}>東京から世界へ</span>
           </div>
         </div>
 
-        {/* Bottom Legal & Telemetry */}
+        {/* 4-COLUMN FOOTER NAVIGATION GRID */}
+        <div className={styles.footerGrid}>
+          {/* Column 1: Shop */}
+          <div className={styles.footerCol}>
+            <span className={styles.colHeader}>SHOP</span>
+            <ul className={styles.navList}>
+              <li><Link href="#collection" className={styles.navLink}>New Arrivals</Link></li>
+              <li><Link href="#collection" className={styles.navLink}>Collections</Link></li>
+              <li><Link href="#collection" className={styles.navLink}>T-Shirts</Link></li>
+              <li><Link href="#collection" className={styles.navLink}>Hoodies</Link></li>
+              <li><Link href="#collection" className={styles.navLink}>Outerwear</Link></li>
+              <li><Link href="#collection" className={styles.navLink}>Limited Drops</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 2: Explore */}
+          <div className={styles.footerCol}>
+            <span className={styles.colHeader}>EXPLORE</span>
+            <ul className={styles.navList}>
+              <li><Link href="#lookbook" className={styles.navLink}>Lookbook</Link></li>
+              <li><Link href="#story" className={styles.navLink}>Journal</Link></li>
+              <li><Link href="#craft" className={styles.navLink}>The Archive</Link></li>
+              <li><Link href="#story" className={styles.navLink}>About the Brand</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 3: Support */}
+          <div className={styles.footerCol}>
+            <span className={styles.colHeader}>SUPPORT</span>
+            <ul className={styles.navList}>
+              <li><Link href="#story" className={styles.navLink}>Contact Studio</Link></li>
+              <li><Link href="#story" className={styles.navLink}>Global Shipping</Link></li>
+              <li><Link href="#story" className={styles.navLink}>Returns & Exchanges</Link></li>
+              <li><Link href="#collection" className={styles.navLink}>Size Guide (CM/IN)</Link></li>
+              <li><Link href="#story" className={styles.navLink}>FAQ & Authentication</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 4: Follow & Social */}
+          <div className={styles.footerCol}>
+            <span className={styles.colHeader}>FOLLOW</span>
+            <ul className={styles.navList}>
+              <li>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className={styles.navLink}>
+                  Instagram
+                </a>
+              </li>
+              <li>
+                <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className={styles.navLink}>
+                  TikTok
+                </a>
+              </li>
+              <li>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className={styles.navLink}>
+                  YouTube
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* FOOTER BOTTOM BAR */}
         <div className={styles.bottomBar}>
-          <div className={styles.legalText}>
-            © {new Date().getFullYear()} SHIN SEKAI // GRAND LINE SUPPLY CO. ALL RIGHTS RESERVED.
-            AN ORIGINAL STREETWEAR HOMAGE TO ONE PIECE LORE.
+          <div className={styles.bottomLeft}>
+            <span>© 2026 SHIN SEKAI — ALL RIGHTS RESERVED</span>
+            <div className={styles.legalLinks}>
+              <Link href="#story">PRIVACY</Link>
+              <span>•</span>
+              <Link href="#story">TERMS</Link>
+              <span>•</span>
+              <Link href="#story">COOKIE PREFERENCES</Link>
+            </div>
           </div>
 
-          <div className={styles.bottomBadges}>
-            <span className={styles.statusBadge}>
-              <span className={styles.statusDot} />
-              SYSTEM OPERATIONAL
+          <div className={styles.bottomRight}>
+            <span className={styles.locationTag}>
+              TOKYO / GLOBAL DISPATCH
             </span>
-            <span className={styles.securityBadge}>
-              <ShieldCheck size={12} />
-              256-BIT ENCRYPTION
+            <span className={styles.dispatchStatus}>
+              <span className={styles.greenDot} />
+              WORLDWIDE DISPATCH ACTIVE
             </span>
           </div>
         </div>

@@ -8,10 +8,11 @@ export const Marquee: React.FC = () => {
     'SHIN SEKAI // 新世界',
     'DROP 01 // 250 PIECES WORLDWIDE',
     '500 GSM JAPANESE COMBED COTTON',
+    'STRAW HAT SYNDICATE // 海賊団',
     'PUFF & DISCHARGE SCREEN PRINTING',
-    'WORLDWIDE PRIORITY EXPEDITIONS',
-    'HAND-NUMBERED GARMENTS',
-    'FROM EAST BLUE TO THE GRAND LINE'
+    'FROM EAST BLUE TO THE NEW WORLD',
+    'HEART PIRATES // 死の外科医',
+    'LIMITED EDITION ARCHIVAL STREETWEAR'
   ];
 
   return (
@@ -27,3 +28,4 @@ export const Marquee: React.FC = () => {
     </div>
   );
 };
+
