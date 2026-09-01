@@ -10,14 +10,18 @@ import styles from './ProductRail.module.css';
 
 interface ProductRailProps {
   onOpenQuickView: (product: Product) => void;
+  products?: Product[];
 }
 
-export const ProductRail: React.FC<ProductRailProps> = ({ onOpenQuickView }) => {
+export const ProductRail: React.FC<ProductRailProps> = ({
+  onOpenQuickView,
+  products = PRODUCTS,
+}) => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilterType>('ALL');
   const [activeSort, setActiveSort] = useState<SortOption>('FEATURED');
 
   const filteredProducts = useMemo(() => {
-    let result = [...PRODUCTS];
+    let result = [...products];
 
     if (activeCategory !== 'ALL') {
       result = result.filter((p) => p.crew === activeCategory);
@@ -42,10 +46,10 @@ export const ProductRail: React.FC<ProductRailProps> = ({ onOpenQuickView }) => 
     }
 
     return result;
-  }, [activeCategory, activeSort]);
+  }, [products, activeCategory, activeSort]);
 
   // Featured hero garment when viewing ALL
-  const heroProduct = PRODUCTS[0];
+  const heroProduct = products[0] || PRODUCTS[0];
   const remainingProducts = activeCategory === 'ALL' ? filteredProducts.slice(1) : filteredProducts;
 
   return (
@@ -81,7 +85,7 @@ export const ProductRail: React.FC<ProductRailProps> = ({ onOpenQuickView }) => 
           onSelectCategory={setActiveCategory}
           activeSort={activeSort}
           onSelectSort={setActiveSort}
-          totalProductsCount={PRODUCTS.length}
+          totalProductsCount={products.length}
           filteredCount={filteredProducts.length}
         />
 
