@@ -342,7 +342,7 @@ export const Hero: React.FC = () => {
         <div className={styles.lowerRight}>
           <div className={styles.interactiveIndicator}>
             <Compass size={14} className={styles.compassIcon} />
-            <span className={styles.indicatorText}>DRAG TO EXPLORE 360°</span>
+            <span className={styles.indicatorText}>SWIPE / DRAG TO EXPLORE 360°</span>
           </div>
         </div>
 

@@ -60,7 +60,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             <input
               ref={inputRef}
               type="text"
-              placeholder="SEARCH BY CHARACTER, CREW, GSM OR EDITION..."
+              placeholder="SEARCH CHARACTER, CREW, GSM..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className={styles.input}

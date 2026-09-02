@@ -16,11 +16,33 @@ import { CartDrawer } from '@/components/CartDrawer/CartDrawer';
 import { WishlistDrawer } from '@/components/WishlistDrawer/WishlistDrawer';
 import { CheckoutModal } from '@/components/CheckoutModal/CheckoutModal';
 
+import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
+
 export default function Home() {
   const [products, setProducts] = useState<Product[]>(PRODUCTS);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
+  const { isOpen: isCartOpen } = useCart();
+  const { isOpen: isWishlistOpen } = useWishlist();
+
+  // Unified Mobile/Desktop Body Scroll Locking
+  useEffect(() => {
+    const isAnyOverlayOpen = Boolean(
+      selectedProduct || isSearchOpen || isCheckoutOpen || isCartOpen || isWishlistOpen
+    );
+
+    if (isAnyOverlayOpen) {
+      document.body.classList.add('scroll-locked');
+    } else {
+      document.body.classList.remove('scroll-locked');
+    }
+
+    return () => {
+      document.body.classList.remove('scroll-locked');
+    };
+  }, [selectedProduct, isSearchOpen, isCheckoutOpen, isCartOpen, isWishlistOpen]);
 
   useEffect(() => {
     const fetchProducts = async () => {
