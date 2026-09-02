@@ -54,8 +54,14 @@
   --space-6: 48px;
   --gutter-desktop: 48px;
   --gutter-tablet: 32px;
-  --gutter-mobile: 20px;
-  --section-padding: 110px;
+  --gutter-mobile: 16px;
+  --section-padding: clamp(60px, 8vw, 110px);
+
+  /* Safe Area Insets for Mobile Devices */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
 
   /* Transition Curves */
   --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
@@ -77,14 +83,23 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  width: 100%;
+  touch-action: manipulation;
 }
 
 body {
   background-color: var(--bg-main);
   color: var(--text-primary);
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   position: relative;
+  width: 100%;
+}
+
+body.scroll-locked {
+  overflow: hidden !important;
+  touch-action: none !important;
 }
 
 /* Luxury Custom Scrollbar */

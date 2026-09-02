@@ -18,8 +18,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [currency, setCurrency] = useState<'USD' | 'JPY' | 'EUR'>('USD');
+  const [mounted, setMounted] = useState<boolean>(false);
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 25);
     };
@@ -27,11 +29,25 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.classList.add('scroll-locked');
+    } else {
+      document.body.classList.remove('scroll-locked');
+    }
+    return () => {
+      document.body.classList.remove('scroll-locked');
+    };
+  }, [mobileMenuOpen]);
+
   const cycleCurrency = () => {
     if (currency === 'USD') setCurrency('JPY');
     else if (currency === 'JPY') setCurrency('EUR');
     else setCurrency('USD');
   };
+
+  const displayWishlistCount = mounted ? wishlistCount : 0;
+  const displayCartCount = mounted ? totalItems : 0;
 
   return (
     <>
@@ -110,22 +126,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
             <button
               onClick={toggleWishlistDrawer}
               className={styles.actionBtn}
-              aria-label={`Wishlist with ${wishlistCount} items`}
+              aria-label={`Wishlist with ${displayWishlistCount} items`}
             >
               <Heart size={15} />
               <span className={styles.actionLabel}>WISHLIST</span>
-              {wishlistCount > 0 && <span className={styles.badge}>{wishlistCount}</span>}
+              {displayWishlistCount > 0 && <span className={styles.badge}>{displayWishlistCount}</span>}
             </button>
 
             <button
               onClick={toggleCart}
               className={`${styles.actionBtn} ${styles.cartBtn}`}
-              aria-label={`Cart with ${totalItems} items`}
+              aria-label={`Cart with ${displayCartCount} items`}
             >
               <ShoppingBag size={15} />
               <span className={styles.cartLabel}>BAG</span>
               <span className={styles.cartCountBadge}>
-                {totalItems}
+                {displayCartCount}
               </span>
             </button>
           </div>

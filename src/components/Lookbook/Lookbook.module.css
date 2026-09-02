@@ -14,6 +14,7 @@
   display: flex;
   flex-direction: column;
   gap: 64px;
+  width: 100%;
 }
 
 /* Header */
@@ -48,11 +49,12 @@
   border-radius: 50%;
   background-color: var(--accent-crimson);
   box-shadow: 0 0 8px var(--accent-crimson);
+  flex-shrink: 0;
 }
 
 .title {
   font-family: var(--font-display);
-  font-size: clamp(36px, 4.5vw, 56px);
+  font-size: clamp(32px, 4.5vw, 56px);
   font-weight: 800;
   letter-spacing: 0.02em;
   color: #ffffff;
@@ -62,7 +64,7 @@
 
 .subtitle {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: clamp(13.5px, 1.4vw, 15px);
   color: #a8a49c;
   letter-spacing: 0.04em;
 }
@@ -80,6 +82,7 @@
   letter-spacing: 0.18em;
   color: var(--accent-crimson);
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .telemetrySub {
@@ -87,6 +90,7 @@
   font-size: 9px;
   letter-spacing: 0.14em;
   color: #7a766e;
+  white-space: nowrap;
 }
 
 /* 6-Look Horizontal Editorial Sequence */
@@ -175,18 +179,19 @@
   letter-spacing: 0.16em;
   background: rgba(6, 6, 6, 0.85);
   border: 1px solid rgba(245, 242, 235, 0.15);
-  padding: 4px 10px;
+  padding: 5px 10px;
   border-radius: 2px;
   color: #ded9cf;
   font-weight: 600;
-  opacity: 0;
-  transform: translateY(4px);
+  opacity: 0.85;
+  transform: translateY(0);
   transition: all var(--transition-fast);
 }
 
 .lookImageWrapper:hover .expandTrigger {
   opacity: 1;
-  transform: translateY(0);
+  background: var(--accent-crimson);
+  color: #ffffff;
 }
 
 /* Look Info Footer */
@@ -226,6 +231,7 @@
 
 .compassIcon {
   color: var(--accent-gold);
+  flex-shrink: 0;
 }
 
 .exploreGarmentBtn {
@@ -234,7 +240,8 @@
   justify-content: space-between;
   width: 100%;
   margin-top: 6px;
-  padding: 10px 14px;
+  padding: 11px 14px;
+  min-height: 42px;
   background: rgba(245, 242, 235, 0.04);
   border: 1px solid rgba(245, 242, 235, 0.1);
   border-radius: var(--radius-xs);
@@ -264,7 +271,8 @@
 .breakImageWrapper {
   position: relative;
   width: 100%;
-  height: 380px;
+  height: clamp(260px, 32vw, 380px);
+  min-height: 240px;
   display: flex;
   align-items: center;
   padding: 48px 64px;
@@ -307,7 +315,7 @@
 
 .breakHeadline {
   font-family: var(--font-display);
-  font-size: clamp(28px, 3.5vw, 44px);
+  font-size: clamp(24px, 3.5vw, 44px);
   font-weight: 800;
   color: #ffffff;
   letter-spacing: 0.02em;
@@ -317,13 +325,17 @@
 
 .breakCopy {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: clamp(13px, 1.4vw, 14.5px);
   color: #ded9cf;
   line-height: 1.6;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .container {
+    padding: 0 32px;
+    gap: 48px;
+  }
   .lookbookSequence {
     grid-template-columns: repeat(2, 1fr);
     gap: 32px 24px;
@@ -340,18 +352,38 @@
     height: 320px;
     padding: 32px 36px;
   }
+  .breakGradient {
+    background: linear-gradient(180deg, rgba(6, 6, 6, 0.92) 0%, rgba(6, 6, 6, 0.75) 50%, rgba(6, 6, 6, 0.4) 100%);
+  }
 }
 
 @media (max-width: 640px) {
   .section {
-    padding: 80px 0;
+    padding: 60px 0 80px;
+  }
+  .container {
+    padding: 0 16px;
+    gap: 36px;
+  }
+  .title {
+    font-size: clamp(26px, 8vw, 36px);
   }
   .lookbookSequence {
     grid-template-columns: 1fr;
     gap: 28px;
   }
   .breakImageWrapper {
-    height: 280px;
-    padding: 24px 20px;
+    height: auto;
+    min-height: 260px;
+    padding: 24px 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding: 0 12px;
+  }
+  .lookCard {
+    padding: 12px;
   }
 }

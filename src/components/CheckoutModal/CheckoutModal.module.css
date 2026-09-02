@@ -4,6 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   background: rgba(4, 4, 4, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -11,8 +12,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: max(16px, env(safe-area-inset-top, 16px)) max(12px, env(safe-area-inset-right, 12px)) max(16px, env(safe-area-inset-bottom, 16px)) max(12px, env(safe-area-inset-left, 12px));
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modal {
@@ -24,8 +26,10 @@
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.9);
   display: flex;
   flex-direction: column;
-  max-height: 90vh;
+  max-height: 92vh;
+  max-height: 92dvh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Header */
@@ -33,7 +37,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 32px;
+  padding: 20px 28px;
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -55,7 +59,12 @@
 
 .closeBtn {
   color: var(--text-secondary);
-  padding: 6px;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   transition: all var(--transition-fast);
 }
@@ -70,13 +79,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 32px;
+  padding: 12px 24px;
   background: #111111;
   border-bottom: 1px solid var(--border-subtle);
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.14em;
-  gap: 16px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .stepNode {
@@ -93,20 +103,20 @@
 }
 
 .stepConnector {
-  width: 24px;
+  width: 20px;
   height: 1px;
   background: var(--border-subtle);
 }
 
 /* Content Body */
 .contentBody {
-  padding: 32px;
+  padding: 28px;
 }
 
 .splitGrid {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
-  gap: 36px;
+  gap: 32px;
 }
 
 /* Form */
@@ -255,6 +265,7 @@
 
 .backBtn {
   padding: 14px 20px;
+  min-height: 48px;
   background: rgba(244, 240, 232, 0.05);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xs);
@@ -280,6 +291,7 @@
   background: var(--accent-crimson);
   color: #fff;
   padding: 14px 20px;
+  min-height: 48px;
   border-radius: var(--radius-xs);
   font-family: var(--font-mono);
   font-size: 11px;
@@ -442,6 +454,8 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .trackingCode {
@@ -456,10 +470,10 @@
   align-items: center;
   gap: 6px;
   background: rgba(244, 240, 232, 0.06);
-  padding: 4px 10px;
+  padding: 6px 12px;
   border-radius: var(--radius-xs);
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 9.5px;
   color: var(--text-primary);
 }
 
@@ -500,6 +514,7 @@
 .returnShopBtn {
   margin-top: 12px;
   padding: 14px 28px;
+  min-height: 48px;
   background: var(--text-primary);
   color: var(--text-inverse);
   font-family: var(--font-mono);
@@ -519,8 +534,27 @@
   .splitGrid {
     grid-template-columns: 1fr;
   }
+  .contentBody {
+    padding: 20px 16px;
+  }
+  .header {
+    padding: 16px 20px;
+  }
   .successSpecs {
     grid-template-columns: 1fr;
     gap: 10px;
+  }
+  .input {
+    font-size: 16px; /* Prevents iOS auto-zoom */
+  }
+}
+
+@media (max-width: 480px) {
+  .inputRow {
+    grid-template-columns: 1fr;
+  }
+  .stepIndicator {
+    font-size: 9px;
+    gap: 8px;
   }
 }

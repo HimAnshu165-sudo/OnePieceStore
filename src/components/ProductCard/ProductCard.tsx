@@ -23,7 +23,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const { toggleWishlist, isInWishlist } = useWishlist();
   const [selectedSize, setSelectedSize] = useState<'S' | 'M' | 'L' | 'XL' | 'XXL'>('L');
   const [isAdded, setIsAdded] = useState<boolean>(false);
-  const isSaved = isInWishlist(product.id);
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isSaved = mounted && isInWishlist(product.id);
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -33,17 +39,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div
+    <article
       className={`${styles.productCard} ${featured ? styles.featuredCard : ''}`}
       onClick={() => onOpenQuickView(product)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          onOpenQuickView(product);
-        }
-      }}
-      aria-label={`View details for ${product.name}`}
+      aria-label={`Product: ${product.name}`}
     >
       {/* Image Container with Editorial Zoom & Secondary Reveal */}
       <div className={styles.imageWrapper}>
@@ -161,6 +160,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
