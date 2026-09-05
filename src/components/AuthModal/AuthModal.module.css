@@ -271,6 +271,15 @@
   background: #181818;
 }
 
+.inputError {
+  border-color: #ff7875 !important;
+}
+
+.inputError:focus {
+  border-color: #ff7875 !important;
+  box-shadow: 0 0 0 2px rgba(255, 120, 117, 0.2) !important;
+}
+
 .textInput::placeholder {
   color: var(--text-muted, #646059);
 }

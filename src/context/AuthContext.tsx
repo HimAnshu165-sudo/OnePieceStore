@@ -50,19 +50,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Initialize session on mount
   useEffect(() => {
     try {
-      // Check localStorage first
-      const stored = localStorage.getItem(SESSION_STORAGE_KEY);
+      const stored = localStorage.getItem(SESSION_STORAGE_KEY) || sessionStorage.getItem(SESSION_STORAGE_KEY);
       if (stored) {
-        setUser(JSON.parse(stored));
-      } else {
-        // Check sessionStorage
-        const sessionStored = sessionStorage.getItem(SESSION_STORAGE_KEY);
-        if (sessionStored) {
-          setUser(JSON.parse(sessionStored));
+        const parsed = JSON.parse(stored);
+        const users = getStoredUsers();
+        const validUser = users.find((u) => u.id === parsed.id && u.status !== 'suspended');
+        if (validUser) {
+          const { passwordHash: _, ...safeUser } = validUser;
+          setUser(safeUser);
+        } else {
+          // Stale or invalid session
+          localStorage.removeItem(SESSION_STORAGE_KEY);
+          sessionStorage.removeItem(SESSION_STORAGE_KEY);
+          localStorage.removeItem(REMEMBER_KEY);
+          setUser(null);
         }
       }
     } catch (e) {
       console.error('Failed to restore auth session:', e);
+      setUser(null);
     }
     setIsLoaded(true);
   }, []);
@@ -193,6 +199,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.removeItem(SESSION_STORAGE_KEY);
       sessionStorage.removeItem(SESSION_STORAGE_KEY);
       localStorage.removeItem(REMEMBER_KEY);
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('authUser');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('adminUser');
+      localStorage.removeItem('adminSession');
     } catch (e) {
       console.error('Failed to clear session:', e);
     }
