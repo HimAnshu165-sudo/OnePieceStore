@@ -35,22 +35,24 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    try {
-      const savedCart = localStorage.getItem('gl_streetwear_cart');
-      if (savedCart) {
-        setCart(JSON.parse(savedCart));
+    queueMicrotask(() => {
+      try {
+        const savedCart = localStorage.getItem('gl_streetwear_cart');
+        if (savedCart) {
+          setCart(JSON.parse(savedCart));
+        }
+        const savedPromo = localStorage.getItem('gl_promo_code');
+        if (savedPromo) {
+          setPromoCode(savedPromo);
+          if (savedPromo.toUpperCase() === 'GRANDLINE15') setDiscountPercent(15);
+          if (savedPromo.toUpperCase() === 'SHINSEKAI') setDiscountPercent(20);
+          if (savedPromo.toUpperCase() === 'PIRATEKING') setDiscountPercent(25);
+        }
+      } catch (e) {
+        console.error('Failed to load cart from localStorage', e);
       }
-      const savedPromo = localStorage.getItem('gl_promo_code');
-      if (savedPromo) {
-        setPromoCode(savedPromo);
-        if (savedPromo.toUpperCase() === 'GRANDLINE15') setDiscountPercent(15);
-        if (savedPromo.toUpperCase() === 'SHINSEKAI') setDiscountPercent(20);
-        if (savedPromo.toUpperCase() === 'PIRATEKING') setDiscountPercent(25);
-      }
-    } catch (e) {
-      console.error('Failed to load cart from localStorage', e);
-    }
-    setIsLoaded(true);
+      setIsLoaded(true);
+    });
   }, []);
 
   useEffect(() => {

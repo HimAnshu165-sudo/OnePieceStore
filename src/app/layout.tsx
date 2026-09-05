@@ -5,6 +5,7 @@ import { CartProvider } from '@/context/CartContext';
 import { WishlistProvider } from '@/context/WishlistContext';
 import { AuthProvider } from '@/context/AuthContext';
 import { ToastProvider } from '@/context/ToastContext';
+import { AuthModal } from '@/components/AuthModal/AuthModal';
 
 const syne = Syne({
   subsets: ['latin'],
@@ -64,6 +65,7 @@ export default function RootLayout({
             <CartProvider>
               <WishlistProvider>
                 {children}
+                <AuthModal />
               </WishlistProvider>
             </CartProvider>
           </ToastProvider>
@@ -72,3 +74,4 @@ export default function RootLayout({
     </html>
   );
 }
+

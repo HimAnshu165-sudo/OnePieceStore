@@ -49,22 +49,62 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Initialize session on mount
   useEffect(() => {
-    try {
-      // Check localStorage first
-      const stored = localStorage.getItem(SESSION_STORAGE_KEY);
-      if (stored) {
-        setUser(JSON.parse(stored));
-      } else {
-        // Check sessionStorage
-        const sessionStored = sessionStorage.getItem(SESSION_STORAGE_KEY);
-        if (sessionStored) {
-          setUser(JSON.parse(sessionStored));
+    let isMounted = true;
+
+    async function initSession() {
+      try {
+        // 1. Try real backend session check via HttpOnly cookie
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.user && isMounted) {
+            const apiUser: AuthUser = {
+              id: data.user.id || data.user._id,
+              name: data.user.name,
+              email: data.user.email,
+              role: data.user.role,
+              status: 'active',
+              createdAt: data.user.createdAt || new Date().toISOString()
+            };
+            setUser(apiUser);
+            setIsLoaded(true);
+            return;
+          }
         }
+      } catch (err) {
+        console.warn('Backend session check unavailable, falling back to local session:', err);
       }
-    } catch (e) {
-      console.error('Failed to restore auth session:', e);
+
+      // 2. Fallback to local storage session if offline
+      try {
+        const stored = localStorage.getItem(SESSION_STORAGE_KEY) || sessionStorage.getItem(SESSION_STORAGE_KEY);
+        if (stored && isMounted) {
+          const parsed = JSON.parse(stored);
+          const users = getStoredUsers();
+          const validUser = users.find((u) => u.id === parsed.id && u.status !== 'suspended');
+          if (validUser) {
+            const { passwordHash: _, ...safeUser } = validUser;
+            setUser(safeUser);
+          } else {
+            localStorage.removeItem(SESSION_STORAGE_KEY);
+            sessionStorage.removeItem(SESSION_STORAGE_KEY);
+            localStorage.removeItem(REMEMBER_KEY);
+            setUser(null);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to restore auth session:', e);
+        if (isMounted) setUser(null);
+      }
+
+      if (isMounted) setIsLoaded(true);
     }
-    setIsLoaded(true);
+
+    initSession();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const openAuthModal = useCallback(
@@ -105,10 +145,62 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     requestedRole: UserRole,
     rememberMe: boolean = true
   ): Promise<{ success: boolean; error?: string }> => {
-    const users = getStoredUsers();
     const cleanEmail = email.trim().toLowerCase();
 
-    // Match by email
+    // 1. Try real backend API login
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail, password })
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success && data.user) {
+        if (requestedRole === 'admin' && data.user.role !== 'admin') {
+          return { success: false, error: 'Security clearance denied: This account lacks administrative clearance.' };
+        }
+
+        const safeUser: AuthUser = {
+          id: data.user.id || data.user._id,
+          name: data.user.name,
+          email: data.user.email,
+          role: data.user.role,
+          status: 'active',
+          createdAt: data.user.createdAt || new Date().toISOString()
+        };
+
+        setUser(safeUser);
+
+        try {
+          if (rememberMe) {
+            localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(safeUser));
+            localStorage.setItem(REMEMBER_KEY, 'true');
+          } else {
+            sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(safeUser));
+            localStorage.removeItem(REMEMBER_KEY);
+          }
+        } catch (e) {
+          console.error('Failed to save session:', e);
+        }
+
+        setIsAuthModalOpen(false);
+        return { success: true };
+      } else if (res.status === 401 || res.status === 400) {
+        // If the backend actively rejected with invalid credentials, check if it matches local mock user
+        const users = getStoredUsers();
+        const match = users.find((u) => u.email.toLowerCase() === cleanEmail);
+        if (!match) {
+          return { success: false, error: data.error || 'Invalid email or password.' };
+        }
+      }
+    } catch (err) {
+      console.warn('Backend login network error, falling back to local auth:', err);
+    }
+
+    // 2. Fallback to mock user authentication for demo credentials
+    const users = getStoredUsers();
     const match = users.find((u) => u.email.toLowerCase() === cleanEmail);
 
     if (!match) {
@@ -152,9 +244,51 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     password: string;
     role: UserRole;
   }): Promise<{ success: boolean; error?: string }> => {
-    const users = getStoredUsers();
     const cleanEmail = data.email.trim().toLowerCase();
 
+    // 1. Try real backend signup
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: data.name.trim(),
+          email: cleanEmail,
+          password: data.password
+        })
+      });
+
+      const resData = await res.json().catch(() => ({}));
+
+      if (res.ok && resData.success && resData.user) {
+        const safeUser: AuthUser = {
+          id: resData.user.id || resData.user._id,
+          name: resData.user.name,
+          email: resData.user.email,
+          role: resData.user.role,
+          status: 'active',
+          createdAt: resData.user.createdAt || new Date().toISOString()
+        };
+
+        setUser(safeUser);
+
+        try {
+          localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(safeUser));
+        } catch (e) {
+          console.error('Failed to save signup session:', e);
+        }
+
+        setIsAuthModalOpen(false);
+        return { success: true };
+      } else if (resData.error) {
+        return { success: false, error: resData.error };
+      }
+    } catch (err) {
+      console.warn('Backend signup error, falling back to local:', err);
+    }
+
+    // 2. Fallback to mock user signup
+    const users = getStoredUsers();
     if (users.some((u) => u.email.toLowerCase() === cleanEmail)) {
       return { success: false, error: 'An account with this email address already exists.' };
     }
@@ -186,18 +320,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { success: true };
   };
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (err) {
+      console.warn('Backend logout request failed:', err);
+    }
+
     setUser(null);
     setPendingActionState(null);
     try {
       localStorage.removeItem(SESSION_STORAGE_KEY);
       sessionStorage.removeItem(SESSION_STORAGE_KEY);
       localStorage.removeItem(REMEMBER_KEY);
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('authUser');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('adminUser');
+      localStorage.removeItem('adminSession');
     } catch (e) {
       console.error('Failed to clear session:', e);
     }
 
-    // If currently on dashboard or admin, navigate back to home
     if (typeof window !== 'undefined') {
       const pathname = window.location.pathname;
       if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {

@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { addStoredOrder } from '@/lib/mockData';
-import { StoreOrder } from '@/types/auth';
 import { X, CheckCircle2, ShieldCheck, Truck, CreditCard, Lock, ArrowRight, PackageCheck, Copy } from 'lucide-react';
 import styles from './CheckoutModal.module.css';
 
@@ -16,13 +15,13 @@ interface CheckoutModalProps {
 
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose }) => {
   const { cart, subtotal, discount, total, isFreeShipping, clearCart } = useCart();
-  const { user, isAuthenticated, openAuthModal } = useAuth();
+  const { user } = useAuth();
 
   const [step, setStep] = useState<'DETAILS' | 'SHIPPING' | 'PAYMENT' | 'SUCCESS'>('DETAILS');
   const [formData, setFormData] = useState({
-    name: user?.name || 'Tanjiro Kamado',
-    email: user?.email || 'tanjiro@demonslayer.store',
-    address: user?.address || 'Shibuya Ward, Dogenzaka 2-24-1',
+    name: user?.name || 'Straw Hat Voyager',
+    email: user?.email || 'ronin@grandlinesupply.jp',
+    address: user?.address || 'Shibuya Ward, Dogenzaka 2-24',
     city: user?.city || 'Tokyo',
     postalCode: user?.postalCode || '150-0043',
     country: user?.country || 'Japan',
@@ -32,9 +31,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
     cvv: '888'
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (user) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         name: user.name || prev.name,
         email: user.email || prev.email,
@@ -51,41 +50,33 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
 
   if (!isOpen) return null;
 
-  const handleNextStep = (e: React.FormEvent) => {
+  const handleNextStep = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!isAuthenticated) {
-      onClose();
-      openAuthModal({ pendingAction: { type: 'CHECKOUT' } });
-      return;
-    }
-
     if (step === 'DETAILS') setStep('SHIPPING');
     else if (step === 'SHIPPING') setStep('PAYMENT');
     else if (step === 'PAYMENT') {
-      const generatedOrder = `ORD-${Math.floor(100000 + Math.random() * 900000)}-DS`;
-      setOrderNumber(generatedOrder);
+      const generatedOrder = `GL-${Math.floor(100000 + Math.random() * 900000)}-SHIN`;
+      const currentShippingCost = isFreeShipping || formData.shippingMethod === 'STANDARD' ? 0 : 18;
+      const finalAmount = total + (isFreeShipping ? 0 : currentShippingCost);
 
-      const shippingCost = isFreeShipping || formData.shippingMethod === 'STANDARD' ? 0 : 18;
-      const orderTotal = total + (isFreeShipping ? 0 : shippingCost);
-
-      const placedOrder: StoreOrder = {
+      const orderPayload = {
         id: generatedOrder,
+        orderId: generatedOrder,
         userId: user?.id || 'guest',
-        userEmail: user?.email || formData.email,
+        userEmail: (user?.email || formData.email).toLowerCase(),
         customerName: user?.name || formData.name,
-        items: cart.map(i => ({
-          product: i.product,
-          selectedSize: i.selectedSize,
-          selectedColor: i.selectedColor,
-          quantity: i.quantity
+        items: cart.map((item) => ({
+          product: item.product,
+          selectedSize: item.selectedSize,
+          selectedColor: item.selectedColor,
+          quantity: item.quantity
         })),
         subtotal,
         discount,
-        total: orderTotal,
-        orderStatus: 'Processing',
-        paymentStatus: 'Paid',
-        trackingNumber: `JP-EXP-${Math.floor(100000000 + Math.random() * 900000000)}`,
+        shippingCost: currentShippingCost,
+        total: finalAmount,
+        orderStatus: 'Processing' as const,
+        paymentStatus: 'Paid' as const,
         shippingAddress: {
           address: formData.address,
           city: formData.city,
@@ -95,7 +86,18 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
         createdAt: new Date().toISOString()
       };
 
-      addStoredOrder(placedOrder);
+      try {
+        await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload)
+        });
+      } catch (orderApiErr) {
+        console.warn('Order API network save error:', orderApiErr);
+      }
+
+      addStoredOrder(orderPayload as any);
+      setOrderNumber(generatedOrder);
       setStep('SUCCESS');
       clearCart();
 

@@ -90,10 +90,87 @@ export default function AdminDashboardPage() {
 
   // Load initial data
   useEffect(() => {
-    setProducts(getStoredProducts());
-    setOrders(getStoredOrders());
-    const loadedUsers = getStoredUsers().map(({ passwordHash: _, ...u }) => u);
-    setUsersList(loadedUsers);
+    let isMounted = true;
+
+    async function loadAdminData() {
+      // 1. Fetch real products from backend
+      try {
+        const res = await fetch('/api/admin/products');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.products) && isMounted) {
+            setProducts(data.products);
+            saveStoredProducts(data.products);
+          }
+        } else {
+          // Fallback to public products endpoint
+          const publicRes = await fetch('/api/products');
+          if (publicRes.ok) {
+            const publicData = await publicRes.json();
+            if (publicData.success && Array.isArray(publicData.products) && isMounted) {
+              setProducts(publicData.products);
+              saveStoredProducts(publicData.products);
+            }
+          } else if (isMounted) {
+            setProducts(getStoredProducts());
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to load products from API, using fallback:', err);
+        if (isMounted) setProducts(getStoredProducts());
+      }
+
+      // 2. Fetch real users from backend if admin
+      try {
+        const usersRes = await fetch('/api/admin/users');
+        if (usersRes.ok) {
+          const usersData = await usersRes.json();
+          if (usersData.success && Array.isArray(usersData.users) && isMounted) {
+            const mappedUsers: AuthUser[] = usersData.users.map((u: { id?: string; _id?: string; name: string; email: string; role: 'user' | 'admin'; status?: AccountStatus; avatar?: string; createdAt?: string }) => ({
+              id: u.id || u._id || '',
+              name: u.name,
+              email: u.email,
+              role: u.role,
+              status: u.status || 'active',
+              avatar: u.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+              createdAt: u.createdAt || new Date().toISOString(),
+              ordersCount: 0
+            }));
+            setUsersList(mappedUsers);
+          }
+        } else if (isMounted) {
+          const loadedUsers = getStoredUsers().map(({ passwordHash: _, ...u }) => u);
+          setUsersList(loadedUsers);
+        }
+      } catch (err) {
+        if (isMounted) {
+          const loadedUsers = getStoredUsers().map(({ passwordHash: _, ...u }) => u);
+          setUsersList(loadedUsers);
+        }
+      }
+
+      // 3. Fetch real orders from backend
+      try {
+        const ordersRes = await fetch('/api/admin/orders');
+        if (ordersRes.ok) {
+          const ordersData = await ordersRes.json();
+          if (ordersData.success && Array.isArray(ordersData.orders) && isMounted) {
+            setOrders(ordersData.orders);
+            saveStoredOrders(ordersData.orders);
+          }
+        } else if (isMounted) {
+          setOrders(getStoredOrders());
+        }
+      } catch (err) {
+        if (isMounted) setOrders(getStoredOrders());
+      }
+    }
+
+    loadAdminData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Open Add Product modal
@@ -130,8 +207,8 @@ export default function AdminDashboardPage() {
     setIsProductModalOpen(true);
   };
 
-  // Save Product (Create / Update)
-  const handleSaveProduct = (e: React.FormEvent) => {
+  // Save Product (Create / Update) with Real MongoDB Sync
+  const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!prodName || !prodPrice) {
       showToast('Product name and price are required.', 'error');
@@ -139,7 +216,7 @@ export default function AdminDashboardPage() {
     }
 
     if (editingProduct) {
-      // Update
+      // Update existing product
       const updatedProd: Product = {
         ...editingProduct,
         name: prodName,
@@ -154,14 +231,32 @@ export default function AdminDashboardPage() {
         description: prodDesc,
         images: [prodImage, ...editingProduct.images.slice(1)]
       };
-      const newProds = updateStoredProduct(updatedProd);
-      setProducts(newProds);
-      showToast(`Product "${prodName}" updated successfully.`, 'success');
+
+      try {
+        const res = await fetch(`/api/admin/products/${encodeURIComponent(editingProduct.id)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatedProd)
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.success && data.product) {
+          setProducts((prev) => prev.map((p) => (p.id === editingProduct.id ? data.product : p)));
+          updateStoredProduct(data.product);
+          showToast(`Product "${prodName}" updated in database.`, 'success');
+          setIsProductModalOpen(false);
+        } else {
+          const errorMsg = data.error || data.message || `Failed to update product in database (HTTP ${res.status})`;
+          showToast(errorMsg, 'error');
+        }
+      } catch (err: any) {
+        showToast(err?.message || 'Network error: Failed to update product in database.', 'error');
+      }
     } else {
-      // Add
+      // Create new product
       const newProd: Product = {
         id: `prod-${Date.now()}`,
-        slug: prodName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        slug: prodName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || `prod-${Date.now()}`,
         name: prodName,
         japaneseName: prodJpName || '新作 // 500GSM ボクシー',
         crew: prodCrew,
@@ -188,35 +283,113 @@ export default function AdminDashboardPage() {
         tags: ['Heavyweight', 'Limited Edition', 'Drop 01'],
         isNewDrop: true
       };
-      const newProds = addStoredProduct(newProd);
-      setProducts(newProds);
-      showToast(`New garment "${prodName}" registered in Tokyo inventory.`, 'success');
-    }
 
-    setIsProductModalOpen(false);
+      try {
+        const res = await fetch('/api/admin/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newProd)
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.success && data.product) {
+          setProducts((prev) => [data.product, ...prev]);
+          addStoredProduct(data.product);
+          showToast(`New garment "${prodName}" registered in MongoDB.`, 'success');
+          setIsProductModalOpen(false);
+        } else {
+          const errorMsg = data.error || data.message || `Failed to create garment in database (HTTP ${res.status})`;
+          showToast(errorMsg, 'error');
+        }
+      } catch (err: any) {
+        showToast(err?.message || 'Network error: Failed to register garment in database.', 'error');
+      }
+    }
   };
 
-  // Delete Product
-  const handleDeleteProduct = (id: string, name: string) => {
-    if (confirm(`Are you sure you want to permanently decommission "${name}"?`)) {
-      const newProds = deleteStoredProduct(id);
-      setProducts(newProds);
-      showToast(`Product "${name}" removed from catalogue.`, 'info');
+  // Delete Product with Real MongoDB Sync
+  const handleDeleteProduct = async (id: string, name: string) => {
+    if (!id) {
+      showToast('Product ID is missing.', 'error');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to permanently decommission "${name}"?`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/admin/products/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success) {
+        // ONLY update UI state and local storage AFTER backend successfully deleted from MongoDB
+        setProducts((prev) => prev.filter((p) => p.id !== id && (p as any)._id !== id && p.slug !== id));
+        deleteStoredProduct(id);
+        showToast(`Product "${name}" permanently deleted from database.`, 'success');
+      } else {
+        // Database deletion failed: do NOT remove from UI state
+        const errorMsg = data.error || data.message || `Failed to delete "${name}" from database. (HTTP ${res.status})`;
+        showToast(errorMsg, 'error');
+        console.error('Failed to delete product from database:', { status: res.status, data });
+      }
+    } catch (err: any) {
+      // Network/server error: do NOT remove from UI state
+      const errorMsg = err?.message || 'Network error: Failed to communicate with server to delete product.';
+      showToast(errorMsg, 'error');
+      console.error('Network error during product deletion:', err);
     }
   };
 
-  // Adjust Stock Quickly
-  const handleStockChange = (p: Product, delta: number) => {
+  // Adjust Stock Quickly with Real Backend Sync
+  const handleStockChange = async (p: Product, delta: number) => {
     const nextStock = Math.max(0, p.stock + delta);
+    const prevStock = p.stock;
     const updatedProd = { ...p, stock: nextStock };
-    const newProds = updateStoredProduct(updatedProd);
-    setProducts(newProds);
+    setProducts((prev) => prev.map((item) => (item.id === p.id ? updatedProd : item)));
+
+    try {
+      const res = await fetch(`/api/admin/products/${encodeURIComponent(p.id)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stock: nextStock })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        updateStoredProduct(updatedProd);
+      } else {
+        // Revert on failure
+        const revertedProd = { ...p, stock: prevStock };
+        setProducts((prev) => prev.map((item) => (item.id === p.id ? revertedProd : item)));
+        showToast(data.error || 'Failed to update stock in database.', 'error');
+      }
+    } catch (err: any) {
+      const revertedProd = { ...p, stock: prevStock };
+      setProducts((prev) => prev.map((item) => (item.id === p.id ? revertedProd : item)));
+      showToast(err?.message || 'Network error updating stock.', 'error');
+    }
   };
 
-  // Change Order Status
-  const handleOrderStatusChange = (orderId: string, status: StoreOrder['orderStatus']) => {
+  // Change Order Status with Real Backend Sync
+  const handleOrderStatusChange = async (orderId: string, status: StoreOrder['orderStatus']) => {
     const updated = updateStoredOrderStatus(orderId, status);
     setOrders(updated);
+
+    try {
+      await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderStatus: status })
+      });
+    } catch (err) {
+      console.warn('Failed to sync order status update to MongoDB:', err);
+    }
+
     showToast(`Order ${orderId} updated to status "${status}".`, 'success');
   };
 
@@ -240,7 +413,7 @@ export default function AdminDashboardPage() {
   };
 
   // Calculate Metrics
-  const totalRevenue = orders.reduce((sum, o) => sum + (o.orderStatus !== 'Cancelled' ? o.total : 0), 42850);
+  const totalRevenue = orders.reduce((sum, o) => sum + (o.orderStatus !== 'Cancelled' ? o.total : 0), 0);
   const pendingOrdersCount = orders.filter((o) => ['Pending', 'Processing', 'Shipped'].includes(o.orderStatus)).length;
   const lowStockCount = products.filter((p) => p.stock <= 5).length;
 

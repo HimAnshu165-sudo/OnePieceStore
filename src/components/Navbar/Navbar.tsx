@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { useAuth } from '@/context/AuthContext';
-import { Search, ShoppingBag, Heart, Menu, X, Globe, ArrowUpRight, User, Shield, LogOut, Package, ChevronDown } from 'lucide-react';
+import { Search, ShoppingBag, Heart, Menu, X, Globe, ArrowUpRight, User, Shield, LogOut } from 'lucide-react';
 import styles from './Navbar.module.css';
 
 interface NavbarProps {
@@ -16,15 +16,12 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
   const { totalItems, toggleCart } = useCart();
   const { wishlistCount, toggleWishlistDrawer } = useWishlist();
-  const { user, isAuthenticated, isAdmin, isUser, openAuthModal, logout } = useAuth();
+  const { user, isAuthenticated, isAdmin, logout, openAuthModal } = useAuth();
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-  const [accountDropdownOpen, setAccountDropdownOpen] = useState<boolean>(false);
   const [currency, setCurrency] = useState<'USD' | 'JPY' | 'EUR'>('USD');
-  const [mounted, setMounted] = useState<boolean>(false);
 
   useEffect(() => {
-    setMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 25);
     };
@@ -32,25 +29,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.classList.add('scroll-locked');
-    } else {
-      document.body.classList.remove('scroll-locked');
-    }
-    return () => {
-      document.body.classList.remove('scroll-locked');
-    };
-  }, [mobileMenuOpen]);
-
   const cycleCurrency = () => {
     if (currency === 'USD') setCurrency('JPY');
     else if (currency === 'JPY') setCurrency('EUR');
     else setCurrency('USD');
   };
-
-  const displayWishlistCount = mounted ? wishlistCount : 0;
-  const displayCartCount = mounted ? totalItems : 0;
 
   return (
     <>
@@ -129,110 +112,70 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
             <button
               onClick={toggleWishlistDrawer}
               className={styles.actionBtn}
-              aria-label={`Wishlist with ${displayWishlistCount} items`}
+              aria-label={`Wishlist with ${wishlistCount} items`}
             >
               <Heart size={15} />
               <span className={styles.actionLabel}>WISHLIST</span>
-              {displayWishlistCount > 0 && <span className={styles.badge}>{displayWishlistCount}</span>}
+              {wishlistCount > 0 && <span className={styles.badge}>{wishlistCount}</span>}
             </button>
 
             <button
               onClick={toggleCart}
               className={`${styles.actionBtn} ${styles.cartBtn}`}
-              aria-label={`Cart with ${displayCartCount} items`}
+              aria-label={`Cart with ${totalItems} items`}
             >
               <ShoppingBag size={15} />
               <span className={styles.cartLabel}>BAG</span>
               <span className={styles.cartCountBadge}>
-                {displayCartCount}
+                {totalItems}
               </span>
             </button>
 
-            {/* Auth / Account Nav Trigger */}
-            {!isAuthenticated ? (
-              <button
-                onClick={() => openAuthModal()}
-                className={styles.authNavBtn}
-                aria-label="Sign In or Create Account"
-              >
-                <User size={14} />
-                <span className={styles.actionLabel}>SIGN IN</span>
-              </button>
-            ) : isAdmin ? (
-              <div className={styles.accountWrapper}>
-                <Link
-                  href="/admin/dashboard"
-                  className={styles.adminBadgeBtn}
-                  aria-label="Admin Dashboard"
+            {/* Authentication Action */}
+            {isAuthenticated ? (
+              <div className={styles.userMenuContainer}>
+                {isAdmin ? (
+                  <Link
+                    href="/admin/dashboard"
+                    className={`${styles.actionBtn} ${styles.adminBadgeBtn}`}
+                    title="Admin Command Console"
+                  >
+                    <Shield size={14} />
+                    <span className={styles.actionLabel}>COMMAND</span>
+                  </Link>
+                ) : (
+                  <Link
+                    href="/dashboard"
+                    className={`${styles.actionBtn} ${styles.userBadgeBtn}`}
+                    title="Crew Dashboard"
+                  >
+                    <User size={14} />
+                    <span className={styles.actionLabel}>CREW</span>
+                  </Link>
+                )}
+                <button
+                  onClick={logout}
+                  className={styles.logoutIconBtn}
+                  title="Sign Out"
+                  aria-label="Sign Out"
                 >
-                  <Shield size={13} />
-                  <span>ADMIN</span>
-                </Link>
+                  <LogOut size={13} />
+                </button>
               </div>
             ) : (
-              <div className={styles.accountWrapper}>
-                <button
-                  onClick={() => setAccountDropdownOpen(!accountDropdownOpen)}
-                  className={styles.userAccountBtn}
-                  aria-label="User Account Menu"
-                >
-                  <div className={styles.userAvatar}>
-                    {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                  </div>
-                  <span className={styles.actionLabel}>
-                    {user?.name ? user.name.split(' ')[0] : 'CREW'}
-                  </span>
-                  <ChevronDown size={12} />
-                </button>
-
-                {accountDropdownOpen && (
-                  <div className={styles.accountDropdownMenu}>
-                    <div className={styles.dropdownHeader}>
-                      <div className={styles.dropdownUserName}>{user?.name}</div>
-                      <div className={styles.dropdownUserTier}>VIP CREW // LEVEL 01</div>
-                    </div>
-                    <Link
-                      href="/dashboard"
-                      onClick={() => setAccountDropdownOpen(false)}
-                      className={styles.dropdownItem}
-                    >
-                      <Package size={14} />
-                      <span>Dashboard Overview</span>
-                    </Link>
-                    <Link
-                      href="/dashboard?tab=orders"
-                      onClick={() => setAccountDropdownOpen(false)}
-                      className={styles.dropdownItem}
-                    >
-                      <Package size={14} />
-                      <span>My Orders</span>
-                    </Link>
-                    <Link
-                      href="/dashboard?tab=profile"
-                      onClick={() => setAccountDropdownOpen(false)}
-                      className={styles.dropdownItem}
-                    >
-                      <User size={14} />
-                      <span>Profile & Address</span>
-                    </Link>
-                    <div className={styles.dropdownDivider} />
-                    <button
-                      onClick={() => {
-                        setAccountDropdownOpen(false);
-                        logout();
-                      }}
-                      className={`${styles.dropdownItem} ${styles.logoutItem}`}
-                    >
-                      <LogOut size={14} />
-                      <span>Sign Out</span>
-                    </button>
-                  </div>
-                )}
-              </div>
+              <button
+                onClick={() => openAuthModal({ defaultRole: 'user', defaultTab: 'LOGIN' })}
+                className={styles.actionBtn}
+                aria-label="Sign In / Register"
+              >
+                <User size={15} />
+                <span className={styles.actionLabel}>SIGN IN</span>
+              </button>
             )}
           </div>
         </div>
       </header>
+
 
       {/* Mobile Navigation Drawer */}
       <div
@@ -287,70 +230,51 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
               <span>04 // JOURNAL</span>
               <ArrowUpRight size={16} />
             </Link>
+          </nav>
 
-            {/* Mobile Auth Shortcuts */}
-            {!isAuthenticated ? (
+          {/* Mobile Auth Button */}
+          <div className={styles.mobileAuthBox}>
+            {isAuthenticated ? (
+              <div className={styles.mobileAuthLoggedIn}>
+                <div className={styles.mobileUserMeta}>
+                  <div className={styles.mobileUserName}>{user?.name}</div>
+                  <div className={styles.mobileUserRole}>
+                    {isAdmin ? 'COMMAND CLEARANCE' : 'REGISTERED CREW'}
+                  </div>
+                </div>
+                <div className={styles.mobileAuthActions}>
+                  <Link
+                    href={isAdmin ? '/admin/dashboard' : '/dashboard'}
+                    className={styles.mobileDashboardLink}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span>{isAdmin ? 'ADMIN CONSOLE' : 'MY DASHBOARD'}</span>
+                    <ArrowUpRight size={14} />
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className={styles.mobileLogoutBtn}
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            ) : (
               <button
-                type="button"
-                className={styles.mobileNavLink}
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  openAuthModal();
+                  openAuthModal({ defaultRole: 'user', defaultTab: 'LOGIN' });
                 }}
-                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
+                className={styles.mobileSignInBtn}
               >
-                <span>05 // SIGN IN</span>
-                <ArrowUpRight size={16} />
+                <User size={16} />
+                <span>SIGN IN // REGISTER</span>
               </button>
-            ) : isAdmin ? (
-              <>
-                <Link
-                  href="/admin/dashboard"
-                  className={styles.mobileNavLink}
-                  onClick={() => setMobileMenuOpen(false)}
-                  style={{ color: '#ff999f' }}
-                >
-                  <span>05 // ADMIN CONSOLE</span>
-                  <ArrowUpRight size={16} />
-                </Link>
-                <button
-                  type="button"
-                  className={styles.mobileNavLink}
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    logout();
-                  }}
-                  style={{ color: '#ff7875', background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
-                >
-                  <span>06 // SIGN OUT</span>
-                  <ArrowUpRight size={16} />
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/dashboard"
-                  className={styles.mobileNavLink}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <span>05 // MY DASHBOARD</span>
-                  <ArrowUpRight size={16} />
-                </Link>
-                <button
-                  type="button"
-                  className={styles.mobileNavLink}
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    logout();
-                  }}
-                  style={{ color: '#ff7875', background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
-                >
-                  <span>06 // SIGN OUT</span>
-                  <ArrowUpRight size={16} />
-                </button>
-              </>
             )}
-          </nav>
+          </div>
 
           <div className={styles.mobileDrawerFooter}>
             <p className={styles.mobileFooterText}>

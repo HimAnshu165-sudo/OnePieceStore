@@ -3,24 +3,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Product } from '@/types';
-import { PRODUCTS } from '@/data/products';
-import { Search, X, ArrowUpRight, Sparkles } from 'lucide-react';
+import { fetchProducts } from '@/lib/products';
+import { Search, X, ArrowUpRight } from 'lucide-react';
 import styles from './SearchModal.module.css';
 
 interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectProduct: (product: Product) => void;
-  products?: Product[];
 }
 
 export const SearchModal: React.FC<SearchModalProps> = ({
   isOpen,
   onClose,
   onSelectProduct,
-  products = PRODUCTS,
 }) => {
   const [query, setQuery] = useState<string>('');
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -34,19 +33,30 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     }
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  // Query products from API when query or open state changes
+  useEffect(() => {
+    if (!isOpen) return;
 
-  const filteredProducts = products.filter((p) => {
-    const q = query.toLowerCase().trim();
-    if (!q) return true;
-    return (
-      p.name.toLowerCase().includes(q) ||
-      p.character.toLowerCase().includes(q) ||
-      p.crew.toLowerCase().includes(q) ||
-      p.japaneseName.toLowerCase().includes(q) ||
-      p.tags.some((t) => t.toLowerCase().includes(q))
-    );
-  });
+    let isMounted = true;
+    const timeoutId = setTimeout(() => {
+      fetchProducts({ q: query })
+        .then((data) => {
+          if (isMounted) {
+            setSearchResults(data);
+          }
+        })
+        .catch((err) => {
+          console.error('Search API error:', err);
+        });
+    }, 120);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeoutId);
+    };
+  }, [query, isOpen]);
+
+  if (!isOpen) return null;
 
   const popularSearches = ['Sun God', '500 GSM', 'Zoro Oni', 'Law Room', 'Wano Ronin', 'Marine HQ'];
 
@@ -95,11 +105,11 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         {/* Search Results Grid */}
         <div className={styles.resultsArea}>
           <div className={styles.resultsHeader}>
-            <span>{filteredProducts.length} PIECES DISCOVERED</span>
+            <span>{searchResults.length} PIECES DISCOVERED</span>
           </div>
 
           <div className={styles.grid}>
-            {filteredProducts.map((product) => (
+            {searchResults.map((product) => (
               <div
                 key={product.id}
                 className={styles.resultCard}

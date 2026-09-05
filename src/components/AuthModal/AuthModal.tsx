@@ -68,14 +68,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onOpenCheckout }) => {
 
   // Synchronize options when modal opens
   useEffect(() => {
-    if (isAuthModalOpen) {
-      setSelectedRole(authModalOptions.defaultRole);
-      setUserMode(authModalOptions.defaultTab);
-      setGeneralError(null);
-      setFieldErrors({});
-      setIsForgotOpen(false);
-      setForgotSent(false);
-    }
+    queueMicrotask(() => {
+      if (isAuthModalOpen) {
+        setSelectedRole(authModalOptions.defaultRole);
+        setUserMode(authModalOptions.defaultTab);
+        setGeneralError(null);
+        setFieldErrors({});
+        setIsForgotOpen(false);
+        setForgotSent(false);
+      }
+    });
   }, [isAuthModalOpen, authModalOptions]);
 
   // Handle ESC key to close
@@ -146,6 +148,78 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onOpenCheckout }) => {
     }
   };
 
+  const handleSignupFullNameChange = (newName: string) => {
+    setFullName(newName);
+    if (fieldErrors.fullName && newName.trim()) {
+      setFieldErrors((prev) => {
+        const updated = { ...prev };
+        delete updated.fullName;
+        return updated;
+      });
+    }
+  };
+
+  const handleSignupEmailChange = (newEmail: string) => {
+    setEmail(newEmail);
+    if (fieldErrors.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+      setFieldErrors((prev) => {
+        const updated = { ...prev };
+        delete updated.email;
+        return updated;
+      });
+    }
+  };
+
+  const handleSignupPasswordChange = (newPassword: string) => {
+    setPassword(newPassword);
+    setFieldErrors((prev) => {
+      const updated = { ...prev };
+
+      // Clear password requirement error if fulfilled
+      if (updated.password && newPassword.length >= 6) {
+        delete updated.password;
+      }
+
+      // Real-time synchronization with confirmPassword
+      if (confirmPassword) {
+        if (newPassword === confirmPassword) {
+          delete updated.confirmPassword;
+        } else {
+          updated.confirmPassword = 'Passwords do not match.';
+        }
+      } else {
+        // If confirmPassword is empty, do not show mismatch error
+        if (updated.confirmPassword === 'Passwords do not match.') {
+          delete updated.confirmPassword;
+        }
+      }
+
+      return updated;
+    });
+  };
+
+  const handleSignupConfirmPasswordChange = (newConfirmPassword: string) => {
+    setConfirmPassword(newConfirmPassword);
+    setFieldErrors((prev) => {
+      const updated = { ...prev };
+
+      if (!newConfirmPassword) {
+        // Empty: do not show mismatch error
+        if (updated.confirmPassword === 'Passwords do not match.') {
+          delete updated.confirmPassword;
+        }
+      } else if (newConfirmPassword === password) {
+        // Exact match: immediately remove error
+        delete updated.confirmPassword;
+      } else {
+        // Mismatch: immediately show error
+        updated.confirmPassword = 'Passwords do not match.';
+      }
+
+      return updated;
+    });
+  };
+
   const handleUserSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setGeneralError(null);
@@ -158,7 +232,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onOpenCheckout }) => {
     if (!password) errors.password = 'Password is required.';
     else if (password.length < 6) errors.password = 'Password must be at least 6 characters.';
 
-    if (confirmPassword !== password) errors.confirmPassword = 'Passwords do not match.';
+    if (!confirmPassword) errors.confirmPassword = 'Confirm your password.';
+    else if (confirmPassword !== password) errors.confirmPassword = 'Passwords do not match.';
 
     if (!termsAccepted) errors.terms = 'You must accept the terms & conditions to proceed.';
 
@@ -474,9 +549,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onOpenCheckout }) => {
                           <input
                             type="text"
                             value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
+                            onChange={(e) => handleSignupFullNameChange(e.target.value)}
                             placeholder="Tanjiro Kamado"
-                            className={styles.textInput}
+                            className={`${styles.textInput} ${fieldErrors.fullName ? styles.inputError : ''}`}
                             autoComplete="name"
                           />
                         </div>
@@ -494,9 +569,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onOpenCheckout }) => {
                           <input
                             type="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => handleSignupEmailChange(e.target.value)}
                             placeholder="tanjiro@demonslayer.store"
-                            className={styles.textInput}
+                            className={`${styles.textInput} ${fieldErrors.email ? styles.inputError : ''}`}
                             autoComplete="email"
                           />
                         </div>
@@ -514,9 +589,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onOpenCheckout }) => {
                           <input
                             type={showPassword ? 'text' : 'password'}
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => handleSignupPasswordChange(e.target.value)}
                             placeholder="••••••••"
-                            className={styles.textInput}
+                            className={`${styles.textInput} ${fieldErrors.password ? styles.inputError : ''}`}
                             autoComplete="new-password"
                           />
                           <button
@@ -542,9 +617,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onOpenCheckout }) => {
                           <input
                             type={showPassword ? 'text' : 'password'}
                             value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onChange={(e) => handleSignupConfirmPasswordChange(e.target.value)}
                             placeholder="••••••••"
-                            className={styles.textInput}
+                            className={`${styles.textInput} ${fieldErrors.confirmPassword ? styles.inputError : ''}`}
                             autoComplete="new-password"
                           />
                         </div>
@@ -555,7 +630,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onOpenCheckout }) => {
                           type="checkbox"
                           id="termsCheck"
                           checked={termsAccepted}
-                          onChange={(e) => setTermsAccepted(e.target.checked)}
+                          onChange={(e) => {
+                            setTermsAccepted(e.target.checked);
+                            if (e.target.checked && fieldErrors.terms) {
+                              setFieldErrors((prev) => {
+                                const updated = { ...prev };
+                                delete updated.terms;
+                                return updated;
+                              });
+                            }
+                          }}
                           className={styles.checkboxInput}
                         />
                         <label htmlFor="termsCheck">

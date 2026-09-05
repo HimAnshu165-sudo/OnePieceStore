@@ -359,16 +359,17 @@ export function deleteStoredProduct(productId: string): Product[] {
 }
 
 export function getStoredAddresses(userId: string): UserAddress[] {
-  if (typeof window === 'undefined') return INITIAL_ADDRESSES;
+  if (typeof window === 'undefined') return userId === 'user-demo-01' ? INITIAL_ADDRESSES : [];
   try {
     const raw = localStorage.getItem(`${ADDRESSES_PREFIX}${userId}`);
     if (!raw) {
-      localStorage.setItem(`${ADDRESSES_PREFIX}${userId}`, JSON.stringify(INITIAL_ADDRESSES));
-      return INITIAL_ADDRESSES;
+      const defaultAddrs = userId === 'user-demo-01' ? INITIAL_ADDRESSES : [];
+      localStorage.setItem(`${ADDRESSES_PREFIX}${userId}`, JSON.stringify(defaultAddrs));
+      return defaultAddrs;
     }
     return JSON.parse(raw);
   } catch {
-    return INITIAL_ADDRESSES;
+    return userId === 'user-demo-01' ? INITIAL_ADDRESSES : [];
   }
 }
 

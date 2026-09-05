@@ -95,43 +95,85 @@ function UserDashboardContent() {
 
   // Read URL query tab
   useEffect(() => {
-    const tabParam = searchParams.get('tab') as DashboardTab;
-    if (tabParam && ['overview', 'orders', 'wishlist', 'cart', 'profile', 'addresses', 'settings'].includes(tabParam)) {
-      setActiveTab(tabParam);
-    }
+    queueMicrotask(() => {
+      const tabParam = searchParams.get('tab') as DashboardTab;
+      if (tabParam && ['overview', 'orders', 'wishlist', 'cart', 'profile', 'addresses', 'settings'].includes(tabParam)) {
+        setActiveTab(tabParam);
+      }
+    });
   }, [searchParams]);
 
   // Load user data
   useEffect(() => {
-    if (user) {
+    let isMounted = true;
+
+    async function loadUserData() {
+      if (!user) return;
+
       setProfileName(user.name || '');
       setProfileEmail(user.email || '');
-      setProfilePhone(user.phone || '+81 90-1234-5678');
-      setProfileAddress(user.address || 'Shibuya Ward, Dogenzaka 2-24-1');
-      setProfileCity(user.city || 'Tokyo');
-      setProfileState(user.state || 'Tokyo Prefecture');
-      setProfilePostalCode(user.postalCode || '150-0043');
+      setProfilePhone(user.phone || '');
+      setProfileAddress(user.address || '');
+      setProfileCity(user.city || '');
+      setProfileState(user.state || '');
+      setProfilePostalCode(user.postalCode || '');
       setProfileCountry(user.country || 'Japan');
 
-      const allOrders = getStoredOrders();
-      // Filter orders by user id or user email
-      const userOrders = allOrders.filter(
-        (o) => o.userId === user.id || o.userEmail.toLowerCase() === user.email.toLowerCase()
-      );
-      setOrders(userOrders.length > 0 ? userOrders : allOrders.slice(0, 3));
+      // 1. Fetch real orders from database
+      try {
+        const res = await fetch('/api/orders');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.orders) && isMounted) {
+            setOrders(data.orders);
+          }
+        } else if (isMounted) {
+          // Fallback strictly filtered for this user
+          const allOrders = getStoredOrders();
+          const userOrders = allOrders.filter(
+            (o) =>
+              (user.id && o.userId === user.id) ||
+              (user.email && o.userEmail?.toLowerCase() === user.email.toLowerCase())
+          );
+          setOrders(userOrders);
+        }
+      } catch (err) {
+        if (isMounted) {
+          const allOrders = getStoredOrders();
+          const userOrders = allOrders.filter(
+            (o) =>
+              (user.id && o.userId === user.id) ||
+              (user.email && o.userEmail?.toLowerCase() === user.email.toLowerCase())
+          );
+          setOrders(userOrders);
+        }
+      }
 
-      const addrs = getStoredAddresses(user.id);
-      setAddresses(addrs);
+      // 2. Fetch addresses from user profile or scoped storage
+      if (isMounted) {
+        if (Array.isArray((user as any).addresses) && (user as any).addresses.length > 0) {
+          setAddresses((user as any).addresses);
+        } else {
+          const addrs = getStoredAddresses(user.id);
+          setAddresses(addrs);
+        }
 
-      const sett = getStoredSettings(user.id);
-      setSettings(sett);
+        const sett = getStoredSettings(user.id);
+        setSettings(sett);
+      }
     }
+
+    loadUserData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [user]);
 
   // Handle Profile Update
-  const handleSaveProfile = (e: React.FormEvent) => {
+  const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateProfile({
+    const payload = {
       name: profileName,
       phone: profilePhone,
       address: profileAddress,
@@ -139,12 +181,25 @@ function UserDashboardContent() {
       state: profileState,
       postalCode: profilePostalCode,
       country: profileCountry
-    });
+    };
+
+    updateProfile(payload);
+
+    try {
+      await fetch('/api/auth/me', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (err) {
+      console.warn('Failed to sync profile update to MongoDB:', err);
+    }
+
     showToast('Profile credentials and shipping data updated.', 'success');
   };
 
   // Handle Add Address
-  const handleAddAddress = (e: React.FormEvent) => {
+  const handleAddAddress = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
     if (!newAddrLine || !newAddrCity) {
@@ -173,6 +228,17 @@ function UserDashboardContent() {
 
     setAddresses(updated);
     saveStoredAddresses(user.id, updated);
+
+    try {
+      await fetch('/api/auth/me', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ addresses: updated })
+      });
+    } catch (err) {
+      console.warn('Failed to sync addresses to MongoDB:', err);
+    }
+
     setIsAddAddressOpen(false);
     showToast('Shipping address added successfully.', 'success');
 
@@ -185,15 +251,26 @@ function UserDashboardContent() {
     setNewAddrDefault(false);
   };
 
-  const handleDeleteAddress = (id: string) => {
+  const handleDeleteAddress = async (id: string) => {
     if (!user) return;
     const updated = addresses.filter((a) => a.id !== id);
     setAddresses(updated);
     saveStoredAddresses(user.id, updated);
+
+    try {
+      await fetch('/api/auth/me', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ addresses: updated })
+      });
+    } catch (err) {
+      console.warn('Failed to sync address deletion to MongoDB:', err);
+    }
+
     showToast('Address removed.', 'info');
   };
 
-  const handleSetDefaultAddress = (id: string) => {
+  const handleSetDefaultAddress = async (id: string) => {
     if (!user) return;
     const updated = addresses.map((a) => ({
       ...a,
@@ -201,6 +278,17 @@ function UserDashboardContent() {
     }));
     setAddresses(updated);
     saveStoredAddresses(user.id, updated);
+
+    try {
+      await fetch('/api/auth/me', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ addresses: updated })
+      });
+    } catch (err) {
+      console.warn('Failed to sync default address to MongoDB:', err);
+    }
+
     showToast('Default dispatch address updated.', 'success');
   };
 

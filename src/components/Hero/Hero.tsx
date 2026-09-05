@@ -132,7 +132,9 @@ export const Hero: React.FC = () => {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setIsReducedMotion(mediaQuery.matches);
+    queueMicrotask(() => {
+      setIsReducedMotion(mediaQuery.matches);
+    });
 
     const handleReducedMotionChange = (e: MediaQueryListEvent) => {
       setIsReducedMotion(e.matches);
@@ -272,8 +274,6 @@ export const Hero: React.FC = () => {
       {/* Background Ambience / Subtle Grid Lines */}
       <div className={styles.bgGrid} aria-hidden="true" />
       <div className={styles.vignetteOverlay} aria-hidden="true" />
-      {/* Editorial Left Scrim Gradient for text contrast */}
-      <div className={styles.editorialScrim} aria-hidden="true" />
 
       {/* Centerpiece: Interactive Character Video (2D Directional Head Tracking) */}
       <div className={styles.videoStage}>
@@ -290,46 +290,46 @@ export const Hero: React.FC = () => {
         <div className={styles.characterGazeAura} aria-hidden="true" />
       </div>
 
-      {/* Vertical Japanese Side Accent */}
-      <div className={styles.verticalJpTrack} aria-hidden="true">
-        <span className={styles.verticalJpText}>新世界 // 航海ストリートウェア</span>
-        <span className={styles.verticalJpLine} />
-      </div>
-
-      {/* Editorial UI Layer: High-Fashion Japanese Composition */}
+      {/* Editorial UI Layer: Asymmetrical High-Fashion Composition */}
       <div className={styles.editorialContent}>
         
-        {/* Top Left Editorial Caption with Hanko Red Seal */}
+        {/* Top Left Drop Specifier */}
         <div className={styles.topLeftBadge}>
-          <div className={styles.editorialCaption}>
-            <span className={styles.hankoSeal}>新世界</span>
-            <span className={styles.captionDot} />
-            <span className={styles.captionText}>DROP 01 // SHIN SEKAI</span>
+          <div className={styles.badgePill}>
+            <span className={styles.pillPulse} />
+            <span>EXPEDITION NO. 001</span>
+          </div>
+          <div className={styles.japaneseSub}>新世界 // 航海ストリートウェア</div>
+        </div>
+
+        {/* Top Right Coordinates & Telemetry */}
+        <div className={styles.topRightSpecs}>
+          <div className={styles.specItem}>
+            <span className={styles.specLabel}>FABRIC WEAVE</span>
+            <span className={styles.specValue}>500 GSM LOOPBACK</span>
+          </div>
+          <div className={styles.specItem}>
+            <span className={styles.specLabel}>SILHOUETTE</span>
+            <span className={styles.specValue}>TOKYO BOXY DROP</span>
           </div>
         </div>
 
-        {/* Top Right Subtle Editorial Line */}
-        <div className={styles.topRightSpecs}>
-          <span className={styles.topRightEditorialLine}>TOKYO HQ // 35.6580° N, 139.7016° E</span>
-        </div>
-
-        {/* Lower Left Editorial Content Column */}
+        {/* Lower Left: Dominant Editorial Statement & CTAs */}
         <div className={styles.lowerLeft}>
-          <div className={styles.superLabel}>EXPEDITION 001 // TOKYO</div>
-          
+          <div className={styles.categorySuper}>SHIN SEKAI ARCHIVE</div>
           <h1 className={styles.mainHeadline}>
-            VOYAGE <br />
-            <span className={styles.crimsonAccent}>BEYOND.</span>
+            WEAR THE <br />
+            <span className={styles.crimsonAccent}>VOYAGE.</span>
           </h1>
-
           <p className={styles.subStatement}>
-            Tokyo craftsmanship meets the boundless spirit of the Grand Line.
+            Heavyweight Japanese cotton garments constructed for the pirate king era.
+            Limited 250 numbered pieces worldwide.
           </p>
 
           <div className={styles.ctaGroup}>
             <Link href="#collection" className={styles.primaryCta}>
               <span>EXPLORE DROP 01</span>
-              <ArrowDownRight size={16} className={styles.ctaArrow} />
+              <ArrowDownRight size={18} className={styles.ctaArrow} />
             </Link>
             <Link href="#lookbook" className={styles.secondaryCta}>
               <span>VIEW LOOKBOOK</span>
@@ -337,26 +337,33 @@ export const Hero: React.FC = () => {
           </div>
         </div>
 
-
-        {/* Lower Right: Subtle Interactive Caption */}
+        {/* Lower Right: Interactive Hint & Garment Provenance */}
         <div className={styles.lowerRight}>
           <div className={styles.interactiveIndicator}>
             <Compass size={14} className={styles.compassIcon} />
-            <span className={styles.indicatorText}>SWIPE / DRAG TO EXPLORE 360°</span>
+            <span className={styles.indicatorText}>360° CURSOR HEAD TRACKING</span>
+          </div>
+          <div className={styles.provenanceBlock}>
+            <div className={styles.provenanceRow}>
+              <span>ORIGIN</span>
+              <strong>TOKYO // EAST BLUE</strong>
+            </div>
+            <div className={styles.provenanceRow}>
+              <span>PRINT DENSITY</span>
+              <strong>HIGH DENSITY PUFF</strong>
+            </div>
+            <div className={styles.provenanceRow}>
+              <span>STATUS</span>
+              <strong className={styles.statusLive}>ALLOCATED & READY</strong>
+            </div>
           </div>
         </div>
 
-        {/* Atmospheric Watermark Typography in Background */}
+        {/* Giant Atmospheric Watermark Typography in Background */}
         <div className={styles.backgroundTypography} aria-hidden="true">
-          SHIN SEKAI
+          GRAND LINE
         </div>
       </div>
     </section>
   );
 };
-
-
-
-
-
-

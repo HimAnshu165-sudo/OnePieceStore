@@ -22,15 +22,17 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('gl_streetwear_wishlist');
-      if (saved) {
-        setWishlist(JSON.parse(saved));
+    queueMicrotask(() => {
+      try {
+        const saved = localStorage.getItem('gl_streetwear_wishlist');
+        if (saved) {
+          setWishlist(JSON.parse(saved));
+        }
+      } catch (e) {
+        console.error('Failed to load wishlist from localStorage', e);
       }
-    } catch (e) {
-      console.error('Failed to load wishlist from localStorage', e);
-    }
-    setIsLoaded(true);
+      setIsLoaded(true);
+    });
   }, []);
 
   useEffect(() => {

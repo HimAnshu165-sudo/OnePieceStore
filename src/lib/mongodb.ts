@@ -1,6 +1,16 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/onepiece_store';
+if (!process.env.MONGODB_URI && typeof process.loadEnvFile === 'function') {
+  try {
+    process.loadEnvFile('.env.local');
+  } catch {
+    try {
+      process.loadEnvFile();
+    } catch {}
+  }
+}
+
+const MONGODB_URI = process.env.MONGODB_URI;
 
 interface MongooseCache {
   conn: typeof mongoose | null;
@@ -8,17 +18,27 @@ interface MongooseCache {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var mongooseCache: MongooseCache | undefined;
 }
 
-let cached: MongooseCache = global.mongooseCache || { conn: null, promise: null };
+const cached: MongooseCache = global.mongooseCache || { conn: null, promise: null };
 
 if (!global.mongooseCache) {
   global.mongooseCache = cached;
 }
 
+/**
+ * Connect to MongoDB using cached Mongoose connection for Next.js serverless/App Router.
+ */
 export async function connectToDatabase(): Promise<typeof mongoose> {
+  const uri = process.env.MONGODB_URI || MONGODB_URI;
+
+  if (!uri) {
+    throw new Error(
+      'Please define the MONGODB_URI environment variable inside .env.local'
+    );
+  }
+
   if (cached.conn) {
     return cached.conn;
   }
@@ -28,8 +48,8 @@ export async function connectToDatabase(): Promise<typeof mongoose> {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((m) => {
-      return m;
+    cached.promise = mongoose.connect(uri, opts).then((mongooseInstance) => {
+      return mongooseInstance;
     });
   }
 

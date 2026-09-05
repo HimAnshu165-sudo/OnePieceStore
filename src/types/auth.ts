@@ -86,3 +86,50 @@ export type PendingAction =
       type: 'CHECKOUT';
     }
   | null;
+
+export interface JWTPayload {
+  userId: string;
+  email: string;
+  role: UserRole;
+  name: string;
+  iat?: number;
+  exp?: number;
+}
+
+export type AuthTokenPayload = JWTPayload;
+
+export interface SafeUser {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface RegisterInput {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginInput {
+  email: string;
+  password: string;
+}
+
+export interface AdminUpdateUserInput {
+  name?: string;
+  email?: string;
+  role?: UserRole;
+}
+
+export interface AuthApiResponse<T = unknown> {
+  success: boolean;
+  message?: string;
+  error?: string;
+  user?: SafeUser;
+  users?: SafeUser[];
+  data?: T;
+}
+
