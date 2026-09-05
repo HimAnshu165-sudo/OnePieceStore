@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import { X, Trash2, Plus, Minus, ShieldCheck, Tag, ArrowRight, ShoppingBag } from 'lucide-react';
 import styles from './CartDrawer.module.css';
 
@@ -29,6 +30,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onOpenCheckout }) => {
     total
   } = useCart();
 
+  const { isAuthenticated, openAuthModal } = useAuth();
   const [inputPromo, setInputPromo] = useState<string>('');
   const [promoFeedback, setPromoFeedback] = useState<{ success: boolean; message: string } | null>(null);
 
@@ -45,6 +47,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onOpenCheckout }) => {
   };
 
   const handleCheckoutClick = () => {
+    if (!isAuthenticated) {
+      closeCart();
+      openAuthModal({
+        pendingAction: { type: 'CHECKOUT' }
+      });
+      return;
+    }
+
     closeCart();
     onOpenCheckout();
   };

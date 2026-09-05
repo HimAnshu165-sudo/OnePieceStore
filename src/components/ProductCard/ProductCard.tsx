@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Product } from '@/types';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
+import { useAuth } from '@/context/AuthContext';
 import { Heart, Plus, Check, Eye } from 'lucide-react';
 import styles from './ProductCard.module.css';
 
@@ -21,6 +22,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { isAuthenticated, openAuthModal } = useAuth();
   const [selectedSize, setSelectedSize] = useState<'S' | 'M' | 'L' | 'XL' | 'XXL'>('L');
   const [isAdded, setIsAdded] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
@@ -33,6 +35,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    if (!isAuthenticated) {
+      openAuthModal({
+        pendingAction: {
+          type: 'ADD_TO_CART',
+          product,
+          size: selectedSize,
+          color: product.color,
+          quantity: 1
+        }
+      });
+      return;
+    }
+
     addToCart(product, selectedSize, product.color, 1);
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 1800);

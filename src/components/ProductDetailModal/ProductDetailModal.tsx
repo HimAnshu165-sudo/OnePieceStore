@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Product } from '@/types';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
+import { useAuth } from '@/context/AuthContext';
 import { X, Heart, ShieldCheck, Truck, RefreshCw, Ruler, Plus, Minus, Check, ArrowRight } from 'lucide-react';
 import styles from './ProductDetailModal.module.css';
 
@@ -22,6 +23,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 }) => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { isAuthenticated, openAuthModal } = useAuth();
 
   const [selectedSize, setSelectedSize] = useState<'S' | 'M' | 'L' | 'XL' | 'XXL'>('L');
   const [selectedColor, setSelectedColor] = useState<string>(product?.color || '');
@@ -35,6 +37,19 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const isSaved = isInWishlist(product.id);
 
   const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      openAuthModal({
+        pendingAction: {
+          type: 'ADD_TO_CART',
+          product,
+          size: selectedSize,
+          color: selectedColor || product.color,
+          quantity
+        }
+      });
+      return;
+    }
+
     addToCart(product, selectedSize, selectedColor || product.color, quantity);
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);

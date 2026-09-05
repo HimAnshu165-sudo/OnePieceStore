@@ -3,6 +3,8 @@ import { Syne, Plus_Jakarta_Sans, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import { WishlistProvider } from '@/context/WishlistContext';
+import { AuthProvider } from '@/context/AuthContext';
+import { ToastProvider } from '@/context/ToastContext';
 
 const syne = Syne({
   subsets: ['latin'],
@@ -57,11 +59,15 @@ export default function RootLayout({
     <html lang="en" className={`${syne.variable} ${jakarta.variable} ${space.variable}`}>
       <body className="antialiased">
         <div className="grain-overlay" aria-hidden="true" />
-        <CartProvider>
-          <WishlistProvider>
-            {children}
-          </WishlistProvider>
-        </CartProvider>
+        <AuthProvider>
+          <ToastProvider>
+            <CartProvider>
+              <WishlistProvider>
+                {children}
+              </WishlistProvider>
+            </CartProvider>
+          </ToastProvider>
+        </AuthProvider>
       </body>
     </html>
   );

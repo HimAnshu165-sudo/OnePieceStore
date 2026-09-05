@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
-import { Search, ShoppingBag, Heart, Menu, X, Globe, ArrowUpRight } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { Search, ShoppingBag, Heart, Menu, X, Globe, ArrowUpRight, User, Shield, LogOut, Package, ChevronDown } from 'lucide-react';
 import styles from './Navbar.module.css';
 
 interface NavbarProps {
@@ -15,8 +16,10 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
   const { totalItems, toggleCart } = useCart();
   const { wishlistCount, toggleWishlistDrawer } = useWishlist();
+  const { user, isAuthenticated, isAdmin, isUser, openAuthModal, logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [accountDropdownOpen, setAccountDropdownOpen] = useState<boolean>(false);
   const [currency, setCurrency] = useState<'USD' | 'JPY' | 'EUR'>('USD');
   const [mounted, setMounted] = useState<boolean>(false);
 
@@ -144,6 +147,89 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
                 {displayCartCount}
               </span>
             </button>
+
+            {/* Auth / Account Nav Trigger */}
+            {!isAuthenticated ? (
+              <button
+                onClick={() => openAuthModal()}
+                className={styles.authNavBtn}
+                aria-label="Sign In or Create Account"
+              >
+                <User size={14} />
+                <span className={styles.actionLabel}>SIGN IN</span>
+              </button>
+            ) : isAdmin ? (
+              <div className={styles.accountWrapper}>
+                <Link
+                  href="/admin/dashboard"
+                  className={styles.adminBadgeBtn}
+                  aria-label="Admin Dashboard"
+                >
+                  <Shield size={13} />
+                  <span>ADMIN</span>
+                </Link>
+              </div>
+            ) : (
+              <div className={styles.accountWrapper}>
+                <button
+                  onClick={() => setAccountDropdownOpen(!accountDropdownOpen)}
+                  className={styles.userAccountBtn}
+                  aria-label="User Account Menu"
+                >
+                  <div className={styles.userAvatar}>
+                    {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <span className={styles.actionLabel}>
+                    {user?.name ? user.name.split(' ')[0] : 'CREW'}
+                  </span>
+                  <ChevronDown size={12} />
+                </button>
+
+                {accountDropdownOpen && (
+                  <div className={styles.accountDropdownMenu}>
+                    <div className={styles.dropdownHeader}>
+                      <div className={styles.dropdownUserName}>{user?.name}</div>
+                      <div className={styles.dropdownUserTier}>VIP CREW // LEVEL 01</div>
+                    </div>
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setAccountDropdownOpen(false)}
+                      className={styles.dropdownItem}
+                    >
+                      <Package size={14} />
+                      <span>Dashboard Overview</span>
+                    </Link>
+                    <Link
+                      href="/dashboard?tab=orders"
+                      onClick={() => setAccountDropdownOpen(false)}
+                      className={styles.dropdownItem}
+                    >
+                      <Package size={14} />
+                      <span>My Orders</span>
+                    </Link>
+                    <Link
+                      href="/dashboard?tab=profile"
+                      onClick={() => setAccountDropdownOpen(false)}
+                      className={styles.dropdownItem}
+                    >
+                      <User size={14} />
+                      <span>Profile & Address</span>
+                    </Link>
+                    <div className={styles.dropdownDivider} />
+                    <button
+                      onClick={() => {
+                        setAccountDropdownOpen(false);
+                        logout();
+                      }}
+                      className={`${styles.dropdownItem} ${styles.logoutItem}`}
+                    >
+                      <LogOut size={14} />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -201,6 +287,69 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
               <span>04 // JOURNAL</span>
               <ArrowUpRight size={16} />
             </Link>
+
+            {/* Mobile Auth Shortcuts */}
+            {!isAuthenticated ? (
+              <button
+                type="button"
+                className={styles.mobileNavLink}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openAuthModal();
+                }}
+                style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
+              >
+                <span>05 // SIGN IN</span>
+                <ArrowUpRight size={16} />
+              </button>
+            ) : isAdmin ? (
+              <>
+                <Link
+                  href="/admin/dashboard"
+                  className={styles.mobileNavLink}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{ color: '#ff999f' }}
+                >
+                  <span>05 // ADMIN CONSOLE</span>
+                  <ArrowUpRight size={16} />
+                </Link>
+                <button
+                  type="button"
+                  className={styles.mobileNavLink}
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    logout();
+                  }}
+                  style={{ color: '#ff7875', background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
+                >
+                  <span>06 // SIGN OUT</span>
+                  <ArrowUpRight size={16} />
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/dashboard"
+                  className={styles.mobileNavLink}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span>05 // MY DASHBOARD</span>
+                  <ArrowUpRight size={16} />
+                </Link>
+                <button
+                  type="button"
+                  className={styles.mobileNavLink}
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    logout();
+                  }}
+                  style={{ color: '#ff7875', background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
+                >
+                  <span>06 // SIGN OUT</span>
+                  <ArrowUpRight size={16} />
+                </button>
+              </>
+            )}
           </nav>
 
           <div className={styles.mobileDrawerFooter}>

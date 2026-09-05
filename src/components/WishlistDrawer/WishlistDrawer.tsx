@@ -4,16 +4,31 @@ import React from 'react';
 import Image from 'next/image';
 import { useWishlist } from '@/context/WishlistContext';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import { X, Heart, Plus, Trash2, ArrowRight } from 'lucide-react';
 import styles from './WishlistDrawer.module.css';
 
 export const WishlistDrawer: React.FC = () => {
   const { wishlist, isOpen, closeWishlist, toggleWishlist } = useWishlist();
   const { addToCart } = useCart();
+  const { isAuthenticated, openAuthModal } = useAuth();
 
   if (!isOpen) return null;
 
   const handleMoveToCart = (product: any) => {
+    if (!isAuthenticated) {
+      openAuthModal({
+        pendingAction: {
+          type: 'ADD_TO_CART',
+          product,
+          size: 'L',
+          color: product.color,
+          quantity: 1
+        }
+      });
+      return;
+    }
+
     addToCart(product, 'L', product.color, 1);
     toggleWishlist(product);
   };

@@ -1,0 +1,490 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(6, 6, 6, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modalCard {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: #0e0e0e;
+  border: 1px solid rgba(245, 242, 235, 0.1);
+  border-radius: var(--radius-md, 6px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(181, 18, 27, 0.12);
+  padding: 36px 32px 32px;
+  color: var(--text-primary, #f5f2eb);
+  overflow: hidden;
+}
+
+/* Atmospheric Anime Streetwear Corner Accents */
+.accentGlow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #b5121b, #c7a76c, #b5121b, transparent);
+}
+
+.topSeal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.sealBrand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted, #646059);
+  text-transform: uppercase;
+}
+
+.sealDot {
+  width: 5px;
+  height: 5px;
+  background-color: var(--accent-crimson, #b5121b);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-crimson, #b5121b);
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #a8a49c);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all var(--transition-fast, 0.18s ease);
+}
+
+.closeBtn:hover {
+  color: var(--text-primary, #f5f2eb);
+  background: rgba(245, 242, 235, 0.06);
+}
+
+/* Role Selector: USER vs ADMIN */
+.roleSelectorWrapper {
+  margin-bottom: 24px;
+}
+
+.roleLabel {
+  display: block;
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted, #646059);
+  margin-bottom: 8px;
+}
+
+.roleToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background: rgba(20, 20, 20, 0.8);
+  padding: 4px;
+  border-radius: var(--radius-sm, 4px);
+  border: 1px solid rgba(245, 242, 235, 0.08);
+}
+
+.roleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--text-secondary, #a8a49c);
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.18s ease);
+}
+
+.roleBtn:hover {
+  color: var(--text-primary, #f5f2eb);
+}
+
+.activeUserRole {
+  background: #171717;
+  color: #f5f2eb;
+  border-color: rgba(245, 242, 235, 0.16);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.activeAdminRole {
+  background: rgba(181, 18, 27, 0.16);
+  color: #ff8087;
+  border-color: rgba(181, 18, 27, 0.4);
+  box-shadow: 0 0 16px rgba(181, 18, 27, 0.2);
+}
+
+/* Header Title */
+.headerTitle {
+  font-family: var(--font-display, sans-serif);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+  color: var(--text-primary, #f5f2eb);
+}
+
+.headerSubtitle {
+  font-size: 13px;
+  color: var(--text-secondary, #a8a49c);
+  margin-bottom: 22px;
+  line-height: 1.45;
+}
+
+/* Mode Switch Tabs for User (LOGIN / SIGN UP) */
+.userModeTabs {
+  display: flex;
+  border-bottom: 1px solid rgba(245, 242, 235, 0.08);
+  margin-bottom: 22px;
+}
+
+.tabBtn {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted, #646059);
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.18s ease);
+  position: relative;
+}
+
+.tabBtn:hover {
+  color: var(--text-secondary, #a8a49c);
+}
+
+.activeTabBtn {
+  color: var(--text-primary, #f5f2eb);
+  border-bottom-color: var(--accent-crimson, #b5121b);
+}
+
+/* Error Banner */
+.errorBanner {
+  background: rgba(255, 77, 79, 0.1);
+  border: 1px solid rgba(255, 77, 79, 0.35);
+  border-radius: var(--radius-xs, 2px);
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #ff7875;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Form Styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inputLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary, #a8a49c);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fieldError {
+  color: #ff7875;
+  font-size: 11px;
+  font-family: var(--font-sans, sans-serif);
+  text-transform: none;
+  font-weight: 400;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted, #646059);
+  pointer-events: none;
+}
+
+.textInput {
+  width: 100%;
+  height: 44px;
+  background: #141414;
+  border: 1px solid rgba(245, 242, 235, 0.1);
+  border-radius: var(--radius-xs, 2px);
+  padding: 0 14px 0 40px;
+  color: var(--text-primary, #f5f2eb);
+  font-family: var(--font-sans, sans-serif);
+  font-size: 13px;
+  transition: all var(--transition-fast, 0.18s ease);
+}
+
+.textInput:focus {
+  outline: none;
+  border-color: var(--accent-crimson, #b5121b);
+  box-shadow: 0 0 0 2px var(--accent-crimson-subtle, rgba(181, 18, 27, 0.15));
+  background: #181818;
+}
+
+.textInput::placeholder {
+  color: var(--text-muted, #646059);
+}
+
+.togglePasswordBtn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-muted, #646059);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast, 0.18s ease);
+}
+
+.togglePasswordBtn:hover {
+  color: var(--text-primary, #f5f2eb);
+}
+
+/* Options Row (Remember Me & Forgot Password) */
+.optionsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--text-secondary, #a8a49c);
+  user-select: none;
+}
+
+.checkboxInput {
+  accent-color: var(--accent-crimson, #b5121b);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.forgotBtn {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #a8a49c);
+  cursor: pointer;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast, 0.18s ease);
+}
+
+.forgotBtn:hover {
+  color: var(--accent-crimson, #b5121b);
+}
+
+/* Submit CTA */
+.submitBtn {
+  width: 100%;
+  height: 46px;
+  background: var(--accent-crimson, #b5121b);
+  border: 1px solid var(--accent-crimson, #b5121b);
+  border-radius: var(--radius-xs, 2px);
+  color: #ffffff;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  transition: all var(--transition-fast, 0.18s ease);
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--accent-crimson-hover, #d41722);
+  border-color: var(--accent-crimson-hover, #d41722);
+  box-shadow: 0 0 20px var(--accent-crimson-glow, rgba(181, 18, 27, 0.35));
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adminSubmitBtn {
+  background: linear-gradient(135deg, #1f1a1a 0%, #2b1214 100%);
+  border: 1px solid rgba(181, 18, 27, 0.5);
+  color: #ffb8bc;
+}
+
+.adminSubmitBtn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2b1214 0%, #3e1217 100%);
+  border-color: #b5121b;
+  color: #ffffff;
+  box-shadow: 0 0 22px rgba(181, 18, 27, 0.4);
+}
+
+/* Demo Quick-Fill Pill */
+.demoPillBox {
+  margin-top: 18px;
+  padding: 12px 14px;
+  background: rgba(24, 24, 24, 0.6);
+  border: 1px dashed rgba(245, 242, 235, 0.12);
+  border-radius: var(--radius-xs, 2px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.demoInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.demoTitle {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-gold, #c7a76c);
+}
+
+.demoCreds {
+  font-size: 11px;
+  color: var(--text-secondary, #a8a49c);
+}
+
+.quickFillBtn {
+  background: rgba(245, 242, 235, 0.08);
+  border: 1px solid rgba(245, 242, 235, 0.14);
+  color: var(--text-primary, #f5f2eb);
+  padding: 6px 12px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast, 0.18s ease);
+}
+
+.quickFillBtn:hover {
+  background: var(--text-primary, #f5f2eb);
+  color: #070707;
+}
+
+/* Forgot Password Simulation Card */
+.forgotCard {
+  padding: 16px;
+  background: #141414;
+  border: 1px solid rgba(245, 242, 235, 0.1);
+  border-radius: var(--radius-xs, 2px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.forgotText {
+  font-size: 12px;
+  color: var(--text-secondary, #a8a49c);
+  line-height: 1.45;
+}
+
+.backToLoginBtn {
+  background: none;
+  border: none;
+  color: var(--accent-crimson, #b5121b);
+  cursor: pointer;
+  font-size: 12px;
+  align-self: flex-start;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.backToLoginBtn:hover {
+  text-decoration: underline;
+}
+
+/* Terms and Conditions row */
+.termsRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary, #a8a49c);
+  line-height: 1.4;
+}
+
+.termsRow a {
+  color: var(--accent-gold, #c7a76c);
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 520px) {
+  .modalCard {
+    padding: 28px 20px 24px;
+  }
+
+  .headerTitle {
+    font-size: 20px;
+  }
+}

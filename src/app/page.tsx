@@ -15,22 +15,31 @@ import { SearchModal } from '@/components/SearchModal/SearchModal';
 import { CartDrawer } from '@/components/CartDrawer/CartDrawer';
 import { WishlistDrawer } from '@/components/WishlistDrawer/WishlistDrawer';
 import { CheckoutModal } from '@/components/CheckoutModal/CheckoutModal';
+import { AuthModal } from '@/components/AuthModal/AuthModal';
 
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
+import { useAuth } from '@/context/AuthContext';
+import { getStoredProducts } from '@/lib/mockData';
 
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>(PRODUCTS);
+  const [products, setProducts] = useState<Product[]>(() => {
+    if (typeof window !== 'undefined') {
+      return getStoredProducts();
+    }
+    return PRODUCTS;
+  });
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
   const { isOpen: isCartOpen } = useCart();
   const { isOpen: isWishlistOpen } = useWishlist();
+  const { isAuthModalOpen } = useAuth();
 
   // Unified Mobile/Desktop Body Scroll Locking
   useEffect(() => {
     const isAnyOverlayOpen = Boolean(
-      selectedProduct || isSearchOpen || isCheckoutOpen || isCartOpen || isWishlistOpen
+      selectedProduct || isSearchOpen || isCheckoutOpen || isCartOpen || isWishlistOpen || isAuthModalOpen
     );
 
     if (isAnyOverlayOpen) {
@@ -129,6 +138,10 @@ export default function Home() {
       <CheckoutModal
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
+      />
+
+      <AuthModal
+        onOpenCheckout={() => setIsCheckoutOpen(true)}
       />
     </main>
   );

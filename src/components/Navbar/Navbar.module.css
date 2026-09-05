@@ -510,5 +510,169 @@
   }
 }
 
+/* Authentication Nav Additions */
+.accountWrapper {
+  position: relative;
+}
+
+.authNavBtn {
+  background: transparent;
+  border: 1px solid rgba(245, 242, 235, 0.12);
+  border-radius: var(--radius-xs);
+  color: #f5f2eb;
+  padding: 6px 10px;
+  min-height: 38px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.authNavBtn:hover {
+  background: rgba(245, 242, 235, 0.08);
+  border-color: rgba(245, 242, 235, 0.25);
+  color: #ffffff;
+}
+
+.adminBadgeBtn {
+  background: rgba(181, 18, 27, 0.15);
+  border: 1px solid rgba(181, 18, 27, 0.4);
+  color: #ff999f;
+  padding: 6px 12px;
+  min-height: 38px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.adminBadgeBtn:hover {
+  background: rgba(181, 18, 27, 0.28);
+  box-shadow: 0 0 16px rgba(181, 18, 27, 0.35);
+  color: #ffffff;
+}
+
+.userAccountBtn {
+  background: rgba(245, 242, 235, 0.05);
+  border: 1px solid rgba(245, 242, 235, 0.1);
+  border-radius: var(--radius-xs);
+  color: #f5f2eb;
+  padding: 5px 10px;
+  min-height: 38px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+
+.userAccountBtn:hover {
+  background: rgba(245, 242, 235, 0.1);
+  border-color: rgba(245, 242, 235, 0.2);
+}
+
+.userAvatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-crimson);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.accountDropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 210px;
+  background: #0f0f0f;
+  border: 1px solid rgba(245, 242, 235, 0.12);
+  border-radius: 4px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85), 0 0 20px rgba(181, 18, 27, 0.1);
+  padding: 8px 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownHeader {
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid rgba(245, 242, 235, 0.06);
+}
+
+.dropdownUserName {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f5f2eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdownUserTier {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--accent-gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  color: #b5b0a6;
+  font-size: 12px;
+  font-family: var(--font-sans);
+  text-decoration: none;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dropdownItem:hover {
+  background: rgba(245, 242, 235, 0.06);
+  color: #ffffff;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: rgba(245, 242, 235, 0.08);
+  margin: 6px 0;
+}
+
+.logoutItem {
+  color: #ff7875;
+}
+
+.logoutItem:hover {
+  background: rgba(255, 77, 79, 0.1);
+  color: #ff999f;
+}
+
+
 
 
